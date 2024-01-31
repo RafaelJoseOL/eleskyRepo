@@ -7,7 +7,7 @@ export const useAddSong = () => {
 
     const addSong = async ({ song_name, song_tags, song_file }) => {
         try {
-            const storageRef = ref(storage, `songs/${song_name}`);
+            const storageRef = ref(storage, `songs/${song_name}.mp3`);
             await uploadBytes(storageRef, song_file);
 
             const downloadURL = await getDownloadURL(storageRef);
