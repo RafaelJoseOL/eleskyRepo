@@ -69,7 +69,7 @@ export const Home = () => {
                 <div className='col-8 songs mt-3 mx-auto'>
                     <div className='row'>
                         {filteredSongs.map((song, index) => (
-                            <div className='song col-6 col-md-4 song mb-4 d-flex flex-column align-items-center justify-content-center' key={index}>
+                            <div className='song col-12 col-md-6 col-xl-4 song mb-4 d-flex flex-column align-items-center justify-content-center' key={index}>
                                 <div className='row col-12'>
                                     <div className='songName col-11 text-center align-items-center d-flex flex-column justify-content-center'>
                                         {song.song_name}
