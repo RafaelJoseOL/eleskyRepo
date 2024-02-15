@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=WindSong&display=swap');
 
+:root {
+  --dwnBtn: rgb(255, 255, 255);
+}
+
 /* :root {
   width: 100%;
   height: 100%;
@@ -13,16 +17,48 @@
   flex-direction: column;
 } */
 
-.App {
+/* .App {
   color: white;
   width: 100%;
   height: 100%;
-  --color: rgba(114, 114, 114, 0.3);
-  background-color: #303131;
-  background-image: linear-gradient(0deg, transparent 24%, var(--color) 25%, var(--color) 26%, transparent 27%, transparent 74%, var(--color) 75%, var(--color) 76%, transparent 77%, transparent),
-    linear-gradient(90deg, transparent 24%, var(--color) 25%, var(--color) 26%, transparent 27%, transparent 74%, var(--color) 75%, var(--color) 76%, transparent 77%, transparent);
-  background-size: 100px 100px;
+  background-size: 50px 50px;
+  background-color: rgb(13, 111, 150);
+  background-image: -webkit-linear-gradient(rgba(255, 255, 255, .2) 50%, transparent 50%, transparent);
+  background-image: -moz-linear-gradient(rgba(255, 255, 255, .2) 50%, transparent 50%, transparent);
+  background-image: -ms-linear-gradient(rgba(255, 255, 255, .2) 50%, transparent 50%, transparent);
+  background-image: -o-linear-gradient(rgba(255, 255, 255, .2) 50%, transparent 50%, transparent);
+  background-image: linear-gradient(rgba(255, 255, 255, .2) 50%, transparent 50%, transparent);
+} */
+
+.App {
+  width: 100%;
+  height: 100%;
+  color: white;
+  background: linear-gradient(
+    45deg,
+    #3498db,
+    #2ecc71
+  );
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  position: relative;
 }
+
+.App::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.1) 1px,
+      transparent 1px
+    ),
+    linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+  background-size: 20px 20px;
+  pointer-events: none;
+}
+
 
 .mainContainer {
   min-height: 100vh;
@@ -34,11 +70,21 @@
   width: 100vw;
 }
 
+.linktrIcon, .social-icon {
+  width: 40px !important;
+  height: 40px !important;
+}
+
+.navbar-custom {
+  background-color: #124D64;
+}
+
 footer {
   width: 100%;
   margin-top: auto !important;
   bottom: 0 !important;
-  background-color: red !important;
+  background-color: #124D64;
+  z-index: 0;
 }
 
 .Btn {
@@ -58,15 +104,15 @@ footer {
 }
 
 .svgIcon {
-  fill: rgb(214, 178, 255);
+  fill: var(--dwnBtn);
 }
 
 .icon2 {
   width: 18px;
   height: 5px;
-  border-bottom: 2px solid rgb(182, 143, 255);
-  border-left: 2px solid rgb(182, 143, 255);
-  border-right: 2px solid rgb(182, 143, 255);
+  border-bottom: 2px solid var(--dwnBtn);
+  border-left: 2px solid var(--dwnBtn);
+  border-right: 2px solid var(--dwnBtn);
 }
 
 .tooltip {

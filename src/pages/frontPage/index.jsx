@@ -60,6 +60,10 @@ export const Home = () => {
                                 <input type="checkbox" checked={selectedTags.includes('Voz')} onChange={() => toggleTagFilter('Voz')} />
                                 <span className='ms-1'>Voz</span>
                             </label>
+                            <label className='mx-3'>
+                                <input type="checkbox" checked={selectedTags.includes('Concierto')} onChange={() => toggleTagFilter('Concierto')} />
+                                <span className='ms-1'>Concierto</span>
+                            </label>
                         </div>
                     </div>
                 </div>
@@ -71,11 +75,11 @@ export const Home = () => {
                         {filteredSongs.map((song, index) => (
                             <div className='song col-12 col-md-6 col-xl-4 song mb-4 d-flex flex-column align-items-center justify-content-center' key={index}>
                                 <div className='row col-12'>
-                                    <div className='songName col-11 text-center align-items-center d-flex flex-column justify-content-center'>
+                                    <div className='songName col-10 text-center align-items-center d-flex flex-column justify-content-center'>
                                         {song.song_name}
                                     </div>
                                     <button
-                                        className='Btn btn-primary col-1'
+                                        className='Btn btn-primary col-1 downloadButton'
                                         onClick={() => {
                                             const a = document.createElement('a');
                                             const songRef = ref(storage, song.song_file)
