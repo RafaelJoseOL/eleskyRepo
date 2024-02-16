@@ -11,7 +11,6 @@
     "formik": "^2.4.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-h5-audio-player": "^3.9.1",
     "react-router-dom": "^6.21.3",
     "react-scripts": "5.0.1",
     "react-social-icons": "^6.12.0",

@@ -3,7 +3,7 @@ import * as Yup from 'yup';
 import { useAddSong } from "../../hooks/useAddSong"
 import { useState, useEffect } from 'react';
 
-export const NewSong = ({ authState }) => {
+export const NewSong = ({ authState, listOfSongs }) => {
     // const [availableTags, setAvailableTags] = useState([]);
     const { addSong } = useAddSong();
     const [song, setSong] = useState(""); 

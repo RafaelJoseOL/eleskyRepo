@@ -34,10 +34,15 @@
   width: 100%;
   height: 100%;
   color: white;
-  background: linear-gradient(
+  /* background: linear-gradient(
     45deg,
     #3498db,
     #2ecc71
+  ); */
+  background: linear-gradient(
+    45deg,
+    #3498db,
+    #66f7ff
   );
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
@@ -176,3 +181,124 @@ footer {
     opacity: 1;
   }
 }
+
+/* Song cards */
+
+.card {
+  --main-color: #fff;
+  --bg-color: #2394db;
+  --sub-main-color: #B9B9B9;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  width: 360px;
+  height: 478px;
+  background-color: var(--bg-color) !important;
+  /* background-image: url('./images/piano-background.jpg');
+  background-size: cover;
+  background-position: center; */
+  border-radius: 20px;
+  padding: 30px;
+}
+
+.card__menu {
+  cursor: pointer;
+}
+
+.card__img {
+  height: 224px;
+  width: 224px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-inline: auto;
+  /* background: #131313; */
+  background-color: var(--bg-color);
+  border-radius: 100%;
+}
+
+.card__img svg {
+  width: 154px;
+  height: 154px;
+  border-radius: 100%;
+}
+
+.card__title {
+  font-weight: 500;
+  font-size: 20px;
+  color: var(--main-color);
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.card__subtitle {
+  font-weight: 400;
+  font-size: 16px;
+  color: var(--main-color);
+  text-align: center;
+  cursor: pointer;
+}
+
+.card__wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.card__time {
+  font-weight: 400;
+  font-size: 12px;
+  color: var(--main-color);
+}
+
+.card__timeline {
+  width: 100%;
+  height: 8px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.card__timeline progress {
+  width: 100%;
+  height: 100%;
+  border-radius: 100px;
+}
+
+.card__timeline progress::-webkit-progress-bar {
+  background-color: #424242;
+  border-radius: 100px;
+}
+
+.card__timeline progress::-webkit-progress-value {
+  background-color: #fff;
+  border-radius: 100px;
+}
+
+.card__btn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.card__btn path {
+  fill: var(--main-color);
+}
+
+.card__btn-play {
+  width: 60px;
+  height: 60px;
+  background: var(--main-color);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card__btn-play path {
+  fill: var(--bg-color);
+}
+
+/* Play/Pause button */
+

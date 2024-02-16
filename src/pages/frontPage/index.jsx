@@ -1,35 +1,9 @@
 import { useState, useEffect } from 'react';
-import { collection, getDocs, query, doc, getDoc, updateDoc } from 'firebase/firestore';
-import { db, storage } from "../../config/firebase-config";
-import { ref, getDownloadURL } from 'firebase/storage';
-import AudioPlayer from 'react-h5-audio-player';
-import 'react-h5-audio-player/lib/styles.css';
+import { SongCard } from '../../components/songcard'
 
-export const Home = () => {
-    const [listOfSongs, setListOfSongs] = useState([]);
+export const Home = ({ listOfSongs }) => {
     const [search, setSearch] = useState('');
     const [selectedTags, setSelectedTags] = useState([]);
-
-    useEffect(() => {
-        const fetchSongs = async () => {
-            try {
-                const q = query(collection(db, "songs"));
-                const querySnapshot = await getDocs(q);
-                const songsData = querySnapshot.docs.map((doc) => {
-                    return {
-                        song_id: doc.data().song_id,
-                        song_name: doc.data().song_name,
-                        song_tags: doc.data().song_tags,
-                        song_file: doc.data().song_file
-                    };
-                });
-                setListOfSongs(songsData);
-            } catch (error) {
-                console.error('Error al obtener las canciones:', error);
-            }
-        };
-        fetchSongs();
-    }, []);
 
     const filteredSongs = listOfSongs.filter((song) => {
         const matchesSearch = song.song_name.toLowerCase().includes(search.toLowerCase());
@@ -73,47 +47,9 @@ export const Home = () => {
                 <div className='col-8 songs mt-3 mx-auto'>
                     <div className='row'>
                         {filteredSongs.map((song, index) => (
-                            <div className='song col-12 col-md-6 col-xl-4 song mb-4 d-flex flex-column align-items-center justify-content-center' key={index}>
-                                <div className='row col-12'>
-                                    <div className='songName col-10 text-center align-items-center d-flex flex-column justify-content-center'>
-                                        {song.song_name}
-                                    </div>
-                                    <button
-                                        className='Btn btn-primary col-1 downloadButton'
-                                        onClick={() => {
-                                            const a = document.createElement('a');
-                                            const songRef = ref(storage, song.song_file)
-                                            getDownloadURL(songRef)
-                                                .then((url) => {
-                                                    a.href = url;
-                                                    a.download = `${song.song_name}.mp3`;
-                                                    a.target = "_blank"
-                                                    a.click();
-                                                })
-                                                .catch((error) => {
-                                                    switch (error.code) {
-                                                        case 'storage/object-not-found':
-                                                            break;
-                                                        case 'storage/unauthorized':
-                                                            break;
-                                                        case 'storage/canceled':
-                                                            break;
-                                                        case 'storage/unknown':
-                                                            break;
-                                                    }
-                                                })
-                                        }}
-                                    >
-                                        <svg class="svgIcon" viewBox="0 0 384 512" height="1em" xmlns="http://www.w3.org/2000/svg"><path d="M169.4 470.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 370.8 224 64c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 306.7L54.6 265.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"></path></svg>
-                                        <span class="icon2"></span>
-                                        <span class="tooltip">Download</span>
-                                    </button>
-                                </div>
-                                <AudioPlayer
-                                    className='col-12'
-                                    hasDefaultKeyBindings={false}
-                                    src={song.song_file}
-                                    autoPlayAfterSrcChange={false}
+                            <div className='song col-12 col-md-10 col-xl-4 mx-auto song mb-4 d-flex flex-column align-items-center justify-content-center' key={index}>
+                                <SongCard
+                                    song={song}
                                 />
                             </div>
                         ))}
