@@ -43,7 +43,7 @@ export const SongCard = ({ song, currSong, setCurrSong, isLogged, liked, handleL
 
     const handlePlayPause = (play) => {
         if (play) {
-            if (currSong != null) {
+            if (currSong != null && audioRef != currSong.audioRef) {
                 currSong.audioRef.current.pause()
             }
             setCurrSong({ ...song, audioRef });
