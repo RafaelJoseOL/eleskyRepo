@@ -60,8 +60,8 @@ export const Home = ({ listOfSongs, isLogged, userID, userLikedSongs, setUserLik
     return (
         <div className='container-fluid mainHome'>
             <div className='row'>
-                <div className='d-none d-md-block col-md-2 sideBar text-light d-flex flex-column justify-content-top ms-3 mt-3'>
-                    <div className='searchBar mt-3'>
+                <div className='col-12 col-md-1 sideBar text-light ms-4 mt-3 d-flex flex-column text-align-center'>
+                    <div className='searchBar mt-3 mx-auto'>
                         <input
                             type="text"
                             placeholder="Buscar por nombre"
@@ -70,7 +70,7 @@ export const Home = ({ listOfSongs, isLogged, userID, userLikedSongs, setUserLik
                             onChange={(e) => setSearch(e.target.value)}
                         />
                     </div>
-                    <div className='mt-2'>
+                    <div className='mt-2 mx-auto'>
                         <label>Filtrar:</label>
                         <div className='mt-2'>
                             <label>
@@ -90,7 +90,7 @@ export const Home = ({ listOfSongs, isLogged, userID, userLikedSongs, setUserLik
                         </div>
                     </div>
                 </div>
-                <div className='col-8 songs mt-4 mx-auto'>
+                <div className='col-9 songs mt-4 mx-auto'>
                     <div className='row'>
                         {filteredSongs.map((song, index) => (
                             <div className='song col-10 col-md-8 col-lg-7 col-xl-6 col-xxl-4 mx-auto song mb-4 d-flex flex-column align-items-center justify-content-center' key={index}>
