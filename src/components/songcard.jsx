@@ -1,15 +1,30 @@
 import React from 'react'
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { ref, getDownloadURL } from 'firebase/storage';
 import { storage } from "../config/firebase-config";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlay, faPause, faHeart, faHeartBroken, faDownload } from '@fortawesome/free-solid-svg-icons'
 
-export const SongCard = ({ song, currSong, setCurrSong, isLogged, liked, handleLikedSong }) => {
+export const SongCard = ({ song, currSong, setCurrSong, isLogged, liked, handleLikedSong, search, selectedTags, volumen }) => {
     const audioRef = useRef();
     const [isPlaying, setIsPlaying] = useState(false);
     const [currentTime, setCurrentTime] = useState('00:00');
     const [duration, setDuration] = useState('00:00');
+
+    useEffect(() => {
+        const pauseSong = async () => {
+            setCurrSong(null);
+            handlePlayPause(false);
+        };
+        pauseSong();
+    }, [search, selectedTags]);
+
+    useEffect(() => {
+        const changeVolumen = async () => {
+            audioRef.current.volume = volumen / 100;
+        };
+        changeVolumen();
+    }, [volumen]);
 
     const setCurrentTimeFormat = (timeInSeconds) => {
         const minutes = Math.floor(timeInSeconds / 60);
@@ -47,6 +62,7 @@ export const SongCard = ({ song, currSong, setCurrSong, isLogged, liked, handleL
         const newTime = clickPercent * audioRef.current.duration;
         audioRef.current.currentTime = newTime;
         setCurrentTimeFormat(newTime);
+        handlePlayPause(true);
     };
 
     return (
@@ -55,7 +71,7 @@ export const SongCard = ({ song, currSong, setCurrSong, isLogged, liked, handleL
             <div className="card__subtitle">{song.song_tags.join(', ')}</div>
             <div className="card__wrapper">
                 <div className="card__time card__time-passed">{currentTime}</div>
-                <div className="card__timeline" onClick={handleProgressClick}>
+                <div className="card__timeline progress-bar" onClick={handleProgressClick}>
                     <progress
                         value={audioRef.current ? audioRef.current.currentTime : 0}
                         max={audioRef.current ? audioRef.current.duration : 0}

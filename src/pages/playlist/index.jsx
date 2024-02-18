@@ -2,7 +2,7 @@ import React from 'react'
 import { useState, useEffect } from 'react';
 import { SongCardPlaylist } from '../../components/songcardPlaylist'
 
-export const Playlist = ({ listOfSongs, isLogged, userID, userLikedSongs, setUserLikedSongs }) => {
+export const Playlist = ({ listOfSongs, isLogged, userLikedSongs, volumen }) => {
   const [randomizedSongs, setRandomizedSongs] = useState([]);
   const [filteredSongs, setFilteredSongs] = useState([]);
   const [useEff, setUseEff] = useState(false);
@@ -37,11 +37,11 @@ export const Playlist = ({ listOfSongs, isLogged, userID, userLikedSongs, setUse
   return (
     <div className='col-10 mx-auto'>
       <div className='d-flex justify-content-center mt-4'>
-        <button className='col-3 col-xl-1 mx-1 mx-xl-3' onClick={() => randomizeOrder("todo")}>Todas</button>
-        <button className='col-3 col-xl-1 mx-1 mx-xl-3' onClick={() => randomizeOrder("piano")}>Solo piano</button>
-        <button className='col-3 col-xl-1 mx-1 mx-xl-3' onClick={() => randomizeOrder("voz")}>Voz</button>
+        <button className='col-3 col-xl-1 mx-1 mx-xl-3 buttonPlaylist' onClick={() => randomizeOrder("todo")}>Todas</button>
+        <button className='col-3 col-xl-1 mx-1 mx-xl-3 buttonPlaylist' onClick={() => randomizeOrder("piano")}>Solo piano</button>
+        <button className='col-3 col-xl-1 mx-1 mx-xl-3 buttonPlaylist' onClick={() => randomizeOrder("voz")}>Voz</button>
         {isLogged && (
-          <button className='col-3 col-xl-1 mx-1 mx-xl-3' onClick={() => randomizeOrder("liked")}>Me gustan</button>
+          <button className='col-3 col-xl-1 mx-1 mx-xl-3 buttonPlaylist' onClick={() => randomizeOrder("liked")}>Me gustan</button>
         )}
       </div>
       <div className='my-4 d-flex justify-content-center'>
@@ -49,6 +49,7 @@ export const Playlist = ({ listOfSongs, isLogged, userID, userLikedSongs, setUse
           <div>
             <SongCardPlaylist
               songs={randomizedSongs}
+              volumen={volumen}
             />
           </div>
         )}

@@ -1,16 +1,23 @@
 import React from 'react'
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { ref, getDownloadURL } from 'firebase/storage';
 import { storage } from "../config/firebase-config";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlay, faPause, faForward, faBackward, faHeart, faDownload } from '@fortawesome/free-solid-svg-icons'
+import { faPlay, faPause, faForward, faBackward, faDownload } from '@fortawesome/free-solid-svg-icons'
 
-export const SongCardPlaylist = ({ songs }) => {
+export const SongCardPlaylist = ({ songs, volumen }) => {
     const audioRef = useRef();
     const [isPlaying, setIsPlaying] = useState(false);
     const [currentTime, setCurrentTime] = useState('00:00');
     const [duration, setDuration] = useState('00:00');
     const [currSong, setCurrSong] = useState(0);
+
+    useEffect(() => {
+        const changeVolumen = async () => {
+            audioRef.current.volume = volumen / 100;
+        };
+        changeVolumen();
+    }, [volumen]);
 
     const changeSong = (next) => {
         if (next >= songs.length) {
@@ -71,7 +78,7 @@ export const SongCardPlaylist = ({ songs }) => {
                 <div className="card__subtitle">{songs[currSong].song_tags.join(', ')}</div>
                 <div className="card__wrapper">
                     <div className="card__time card__time-passed">{currentTime}</div>
-                    <div className="card__timeline" onClick={handleProgressClick}>
+                    <div className="card__timeline progress-bar" onClick={handleProgressClick}>
                         <progress
                             value={audioRef.current ? audioRef.current.currentTime : 0}
                             max={audioRef.current ? audioRef.current.duration : 0}

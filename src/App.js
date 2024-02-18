@@ -23,6 +23,7 @@ function App() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [userLikedSongs, setUserLikedSongs] = useState([]);
   const [userID, setUserID] = useState(0);
+  const [volumen, setVolumen] = useState(50);
   const provider = new GoogleAuthProvider();
   const { addUser } = useAddUser();
 
@@ -58,6 +59,11 @@ function App() {
     });
     return () => unsubscribe();
   }, []);
+
+  const handleVolumeChange = (event) => {
+    const nuevoVolumen = event.target.value;
+    setVolumen(nuevoVolumen);
+  };
 
   const checkAdminStatus = async (email) => {
     try {
@@ -99,7 +105,7 @@ function App() {
       }
 
       console.log("Inicio de sesión exitoso:", user);
-      // window.location.reload();
+      window.location.reload();
     } catch (error) {
       console.error("Error durante el inicio de sesión:", error);
     }
@@ -151,15 +157,16 @@ function App() {
                     </button>
                   )}
                 </div>
+                <input type="range" min="0" max="100" value={volumen} onChange={handleVolumeChange} />
               </div>
             </div>
           </nav>
           <Routes>
             <Route path="/" exact element={<Home listOfSongs={listOfSongs} isLogged={isLogged} userID={userID}
-              userLikedSongs={userLikedSongs} setUserLikedSongs={setUserLikedSongs} />} />
+              userLikedSongs={userLikedSongs} setUserLikedSongs={setUserLikedSongs} volumen={volumen}/>} />
             <Route path="/NewSong" exact element={<NewSong listOfSongs={listOfSongs} />} />
             <Route path="/Playlist" exact element={<Playlist listOfSongs={listOfSongs} isLogged={isLogged}
-              userLikedSongs={userLikedSongs} setUserLikedSongs={setUserLikedSongs} />} />
+              userLikedSongs={userLikedSongs} setUserLikedSongs={setUserLikedSongs} volumen={volumen}/>} />
           </Routes>
           <footer className="text-center text-white myFooter">
             <div className="container p-3 col-12 col-xl-3">
