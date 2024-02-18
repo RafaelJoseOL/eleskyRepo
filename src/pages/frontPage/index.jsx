@@ -4,6 +4,7 @@ import { SongCard } from '../../components/songcard'
 export const Home = ({ listOfSongs }) => {
     const [search, setSearch] = useState('');
     const [selectedTags, setSelectedTags] = useState([]);
+    const [currSong, setCurrSong] = useState(null);
 
     const filteredSongs = listOfSongs.filter((song) => {
         const matchesSearch = song.song_name.toLowerCase().includes(search.toLowerCase());
@@ -50,6 +51,8 @@ export const Home = ({ listOfSongs }) => {
                             <div className='song col-12 col-md-10 col-xl-4 mx-auto song mb-4 d-flex flex-column align-items-center justify-content-center' key={index}>
                                 <SongCard
                                     song={song}
+                                    currSong={currSong}
+                                    setCurrSong={setCurrSong}
                                 />
                             </div>
                         ))}

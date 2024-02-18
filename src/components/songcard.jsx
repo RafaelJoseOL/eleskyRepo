@@ -2,8 +2,10 @@ import React from 'react'
 import { useRef, useState } from 'react';
 import { ref, getDownloadURL } from 'firebase/storage';
 import { storage } from "../config/firebase-config";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPlay, faPause, faHeart, faDownload } from '@fortawesome/free-solid-svg-icons'
 
-export const SongCard = ({ song }) => {
+export const SongCard = ({ song, currSong, setCurrSong }) => {
     const audioRef = useRef();
     const [isPlaying, setIsPlaying] = useState(false);
     const [currentTime, setCurrentTime] = useState('00:00');
@@ -24,22 +26,20 @@ export const SongCard = ({ song }) => {
         setDuration(formattedDuration);
     };
 
-    const handlePlayPauseClick = () => {
-        handlePlayPause(!isPlaying);
-        if (!isPlaying) {
+    const handlePlayPause = (play) => {        
+        if (play) {
+            if(currSong != null){
+                currSong.audioRef.current.pause()
+            }
+            setCurrSong({ ...song, audioRef });
+            setIsPlaying(true);
             audioRef.current.play();
         } else {
+            setIsPlaying(false);
             audioRef.current.pause();
         }
     };
-
-    const handlePlayPause = (play) => {
-        if (play) {
-            setIsPlaying(true);
-        } else {
-            setIsPlaying(false);
-        }
-    };
+    
 
     const handleProgressClick = (e) => {
         const progressWidth = e.target.clientWidth;
@@ -64,49 +64,39 @@ export const SongCard = ({ song }) => {
                 </div>
                 <div className="card__time card__time-left">{duration}</div>
             </div>
-            <div className="card__wrapper">
-                <button className="card__btn card__btn-play mx-auto" onClick={handlePlayPauseClick}>
-                    <svg
-                        fill={isPlaying ? "#000" : "#fff"}
-                        height={22}
-                        viewBox="0 0 18 22"
-                        width={18}
-                        xmlns="http://www.w3.org/2000/svg"
-                    >
-                        <path d="m0 0v22l18-11z" />
-                    </svg>
-                </button>
-                <button
-                    className='Btn btn-primary col-1 downloadButton mx-auto'
-                    onClick={() => {
-                        const a = document.createElement('a');
-                        const songRef = ref(storage, song.song_file)
-                        getDownloadURL(songRef)
-                            .then((url) => {
-                                a.href = url;
-                                a.download = `${song.song_name}.mp3`;
-                                a.target = "_blank"
-                                a.click();
-                            })
-                            .catch((error) => {
-                                switch (error.code) {
-                                    case 'storage/object-not-found':
-                                        break;
-                                    case 'storage/unauthorized':
-                                        break;
-                                    case 'storage/canceled':
-                                        break;
-                                    case 'storage/unknown':
-                                        break;
-                                    default:
-                                        break;
-                                }
-                            })
-                    }}
-                >
-                    <svg className="svgIcon" viewBox="0 0 384 512" height="1em" xmlns="http://www.w3.org/2000/svg"><path d="M169.4 470.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 370.8 224 64c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 306.7L54.6 265.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"></path></svg>
-                    <span className="icon2"></span>
-                    <span className="tooltip">Download</span>
+            <div className="card__wrapper mx-auto">
+                {!isPlaying ? (
+                    <button className='playlistButton' id="play" onClick={() => handlePlayPause(true)}><FontAwesomeIcon icon={faPlay} /></button>
+                ) :
+                    (
+                        <button className='playlistButton' id="play" onClick={() => handlePlayPause(false)}><FontAwesomeIcon icon={faPause} /></button>
+                    )}
+                <button className='playlistButton' id="download-song" onClick={() => {
+                    const a = document.createElement('a');
+                    const songRef = ref(storage, song.song_file)
+                    getDownloadURL(songRef)
+                        .then((url) => {
+                            a.href = url;
+                            a.download = `${song.song_name}.mp3`;
+                            a.target = "_blank"
+                            a.click();
+                        })
+                        .catch((error) => {
+                            switch (error.code) {
+                                case 'storage/object-not-found':
+                                    break;
+                                case 'storage/unauthorized':
+                                    break;
+                                case 'storage/canceled':
+                                    break;
+                                case 'storage/unknown':
+                                    break;
+                                default:
+                                    break;
+                            }
+                        })
+                }}><FontAwesomeIcon icon={faDownload}
+                    />
                 </button>
                 <audio
                     ref={audioRef}

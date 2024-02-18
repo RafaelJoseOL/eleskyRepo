@@ -7,32 +7,93 @@ import { Playlist } from "./pages/playlist/index";
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import { SocialIcon } from 'react-social-icons'
 import { useState, useEffect } from 'react';
-import { collection, getDocs, query } from 'firebase/firestore';
+import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from "./config/firebase-config";
+import {
+  GoogleAuthProvider, getAuth, signInWithPopup, signOut,
+  browserLocalPersistence, setPersistence, onAuthStateChanged
+} from "firebase/auth";
+import googleIcon from "./images/google.png"
 
 function App() {
   const [listOfSongs, setListOfSongs] = useState([]);
+  const [isLogged, setIsLogged] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const provider = new GoogleAuthProvider();
 
-    useEffect(() => {
-        const fetchSongs = async () => {
-            try {
-                const q = query(collection(db, "songs"));
-                const querySnapshot = await getDocs(q);
-                const songsData = querySnapshot.docs.map((doc) => {
-                    return {
-                        song_id: doc.data().song_id,
-                        song_name: doc.data().song_name,
-                        song_tags: doc.data().song_tags,
-                        song_file: doc.data().song_file
-                    };
-                });
-                setListOfSongs(songsData);
-            } catch (error) {
-                console.error('Error al obtener las canciones:', error);
-            }
-        };
-        fetchSongs();
-    }, []);
+  useEffect(() => {
+    const fetchSongs = async () => {
+      try {
+        const q = query(collection(db, "songs"));
+        const querySnapshot = await getDocs(q);
+        const songsData = querySnapshot.docs.map((doc) => {
+          return {
+            song_id: doc.data().song_id,
+            song_name: doc.data().song_name,
+            song_tags: doc.data().song_tags,
+            song_file: doc.data().song_file
+          };
+        });
+        setListOfSongs(songsData);
+      } catch (error) {
+        console.error('Error al obtener las canciones:', error);
+      }
+    };
+    fetchSongs();
+  }, []);
+
+  useEffect(() => {
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        setIsLogged(true);
+        await checkAdminStatus(user.email);
+      }
+    });
+    return () => unsubscribe();
+  }, []);
+
+  const checkAdminStatus = async (email) => {
+    try {
+      const adminsRef = collection(db, "admins");
+      const q = query(adminsRef, where("email", "==", email.toString()));
+      const querySnapshot = await getDocs(q);
+
+      if (!querySnapshot.empty) {
+        setIsAdmin(true);
+      } else {
+        setIsAdmin(false);
+      }
+    } catch (error) {
+      console.error('Error al verificar el estado del administrador:', error);
+    }
+  }
+
+  const handleGoogleLogin = async () => {
+    const auth = getAuth();
+    await setPersistence(auth, browserLocalPersistence);
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        if (result.user) {
+          console.log("Inicio de sesión exitoso:", result.user);
+        } else {
+          console.log("El inicio de sesión no tuvo éxito.");
+        }
+      }).catch((error) => {
+        console.error("Error durante el inicio de sesión:", error);
+      });
+  };
+
+  const handleGoogleLogout = async () => {
+    try {
+      const auth = getAuth();
+      await signOut(auth);
+      setIsAdmin(false);
+      setIsLogged(false)
+    } catch (error) {
+      console.error("Error al cerrar la sesión:", error);
+    }
+  };
 
   return (
     <div className="App">
@@ -40,7 +101,7 @@ function App() {
         <div className='mainContainer'>
           <nav className="navbar navbar-expand-lg navbar-dark navbar-custom">
             <div className="container-fluid">
-              <Link to="/" className="navbar-brand ms-4 straru-navBar">Elesky</Link>
+              <Link to="/" className="navbar-brand ms-4">Inicio</Link>
               <button className="navbar-toggler"
                 type="button"
                 data-bs-toggle="collapse"
@@ -52,8 +113,21 @@ function App() {
               </button>
               <div className="collapse navbar-collapse navbar-custom" id="navbarSupportedContent">
                 <div className='mb-2 mb-lg-0 ms-4'>
-                  <Link to="/NewSong" className="navbar-brand ms-4">Añadir canción</Link>
                   <Link to="/Playlist" className="navbar-brand ms-4">Playlist</Link>
+                  {isAdmin && (
+                    <Link to="/NewSong" className="navbar-brand ms-4">Añadir canción</Link>
+                  )}
+                  {!isLogged ? (
+                    <button className="navbar-brand ms-4 log-btn" onClick={handleGoogleLogin}>
+                      <img src={googleIcon} className='log-img me-3' />
+                      <span>Login</span>
+                    </button>
+                  ) : (
+                    <button className="navbar-brand ms-4 log-btn" onClick={handleGoogleLogout}>
+                      <img src={googleIcon} className='log-img me-3' />
+                      <span>Logout</span>
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
@@ -64,7 +138,7 @@ function App() {
             <Route path="/Playlist" exact element={<Playlist listOfSongs={listOfSongs} />} />
           </Routes>
           <footer className="text-center text-white myFooter">
-            <div className="container p-3 col-12 col-md-3">
+            <div className="container p-3 col-12 col-xl-3">
               <section className="my-auto row">
                 <div className='linktr col-3'>
                   <a href="https://linktr.ee/elesky" target="_blank" rel="noreferrer noopener">
@@ -75,7 +149,7 @@ function App() {
                     />
                   </a>
                   <div className="icon-subtext">Linktr</div>
-                </div>                
+                </div>
                 <div className='conciertos col-3'>
                   <a href="https://lnk.bio/Elesky" target="_blank" rel="noreferrer noopener">
                     <img

@@ -6,7 +6,6 @@ export const Playlist = ({ listOfSongs }) => {
   const [randomizedSongs, setRandomizedSongs] = useState([]);
   const [filteredSongs, setFilteredSongs] = useState([]);
   const [useEff, setUseEff] = useState(false);
-  const [currSong, setCurrSong] = useState(0);
 
   useEffect(() => {
     const shuffleAndSetRandomizedSongs = () => {
@@ -15,11 +14,6 @@ export const Playlist = ({ listOfSongs }) => {
     };
     shuffleAndSetRandomizedSongs();
   }, [useEff]);
-
-  const nextSong = () => {
-    setCurrSong(currSong + 1);
-    console.log(currSong)
-  }
 
   const randomizeOrder = (tag) => {
     switch (tag) {
@@ -41,20 +35,17 @@ export const Playlist = ({ listOfSongs }) => {
   return (
     <div className='col-10 mx-auto'>
       <div className='d-flex justify-content-center mt-4'>
-        <button className='col-12 col-xl-1 mx-3' onClick={() => randomizeOrder("todo")}>Todas</button>
-        <button className='col-12 col-xl-1 mx-3' onClick={() => randomizeOrder("piano")}>Solo piano</button>
-        <button className='col-12 col-xl-1 mx-3' onClick={() => randomizeOrder("voz")}>Voz</button>
+        <button className='col-3 col-xl-1 mx-1 mx-xl-3' onClick={() => randomizeOrder("todo")}>Todas</button>
+        <button className='col-3 col-xl-1 mx-1 mx-xl-3' onClick={() => randomizeOrder("piano")}>Solo piano</button>
+        <button className='col-3 col-xl-1 mx-1 mx-xl-3' onClick={() => randomizeOrder("voz")}>Voz</button>
+        <button className='col-3 col-xl-1 mx-1 mx-xl-3'>Me gustan (soon)</button>
       </div>
-      <div className='mt-4 d-flex justify-content-center'>
+      <div className='my-4 d-flex justify-content-center'>
         {randomizedSongs.length > 0 && (
           <div>
             <SongCardPlaylist
-              song={randomizedSongs[currSong]}
-              nextSong={nextSong}
+              songs={randomizedSongs}
             />
-            {randomizedSongs.map(song => (
-              <div key={song.song_id}>{song.song_name}</div>
-            ))}
           </div>
         )}
       </div>
@@ -62,4 +53,4 @@ export const Playlist = ({ listOfSongs }) => {
   )
 }
 
-export default Playlist
+export default Playlist;

@@ -2,12 +2,25 @@ import React from 'react'
 import { useRef, useState } from 'react';
 import { ref, getDownloadURL } from 'firebase/storage';
 import { storage } from "../config/firebase-config";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPlay, faPause, faForward, faBackward, faHeart, faDownload } from '@fortawesome/free-solid-svg-icons'
 
-export const SongCardPlaylist = ({ song, nextSong }) => {
+export const SongCardPlaylist = ({ songs }) => {
     const audioRef = useRef();
     const [isPlaying, setIsPlaying] = useState(false);
     const [currentTime, setCurrentTime] = useState('00:00');
     const [duration, setDuration] = useState('00:00');
+    const [currSong, setCurrSong] = useState(0);
+
+    const changeSong = (next) => {
+        if (next >= songs.length) {
+            setCurrSong(0);
+        } else if (next < 0) {
+            setCurrSong(songs.length - 1);
+        } else {
+            setCurrSong(next);
+        }
+    }
 
     const setCurrentTimeFormat = (timeInSeconds) => {
         const minutes = Math.floor(timeInSeconds / 60);
@@ -24,31 +37,6 @@ export const SongCardPlaylist = ({ song, nextSong }) => {
         setDuration(formattedDuration);
     };
 
-    const handlePlayPauseClick = () => {
-        handlePlayPause(!isPlaying);
-        if (!isPlaying) {
-            audioRef.current.play();
-        } else {
-            audioRef.current.pause();
-        }
-    };
-
-    const handlePlayPause = (play) => {
-        if (play) {
-            setIsPlaying(true);
-        } else {
-            setIsPlaying(false);
-        }
-    };
-
-    const handleSongEnded = () => {
-        setIsPlaying(false);
-        nextSong();
-        setTimeout(() => {
-            handlePlayPauseClick();
-        }, 2000);
-    };
-
     const handleProgressClick = (e) => {
         const progressWidth = e.target.clientWidth;
         const clickOffsetX = e.nativeEvent.offsetX;
@@ -58,41 +46,54 @@ export const SongCardPlaylist = ({ song, nextSong }) => {
         setCurrentTimeFormat(newTime);
     };
 
+    const handlePlayPause = (play) => {
+        if (play) {
+            setIsPlaying(true);
+            audioRef.current.play();
+        } else {
+            setIsPlaying(false);
+            audioRef.current.pause();
+        }
+    };
+
+    const handleChangeSong = (next) => {
+        handlePlayPause(false);
+        changeSong(next);
+        setTimeout(() => {
+            handlePlayPause(true);
+        }, 200);
+    };
+
     return (
-        <div className="card">
-            <div className="card__title">{song.song_name}</div>
-            <div className="card__subtitle">{song.song_tags.join(', ')}</div>
-            <div className="card__wrapper">
-                <div className="card__time card__time-passed">{currentTime}</div>
-                <div className="card__timeline" onClick={handleProgressClick}>
-                    <progress
-                        value={audioRef.current ? audioRef.current.currentTime : 0}
-                        max={audioRef.current ? audioRef.current.duration : 0}
-                    />
+        <div>
+            <div className="card">
+                <div className="card__title">{songs[currSong].song_name}</div>
+                <div className="card__subtitle">{songs[currSong].song_tags.join(', ')}</div>
+                <div className="card__wrapper">
+                    <div className="card__time card__time-passed">{currentTime}</div>
+                    <div className="card__timeline" onClick={handleProgressClick}>
+                        <progress
+                            value={audioRef.current ? audioRef.current.currentTime : 0}
+                            max={audioRef.current ? audioRef.current.duration : 0}
+                        />
+                    </div>
+                    <div className="card__time card__time-left">{duration}</div>
                 </div>
-                <div className="card__time card__time-left">{duration}</div>
-            </div>
-            <div className="card__wrapper">
-                <button className="card__btn card__btn-play mx-auto" onClick={handlePlayPauseClick}>
-                    <svg
-                        fill={isPlaying ? "#000" : "#fff"}
-                        height={22}
-                        viewBox="0 0 18 22"
-                        width={18}
-                        xmlns="http://www.w3.org/2000/svg"
-                    >
-                        <path d="m0 0v22l18-11z" />
-                    </svg>
-                </button>
-                <button
-                    className='Btn btn-primary col-1 downloadButton mx-auto'
-                    onClick={() => {
+                <div className="card__wrapper mx-auto">
+                    <button className='playlistButton' id="previous-song" onClick={() => handleChangeSong(currSong - 1)}><FontAwesomeIcon icon={faBackward} /></button>
+                    {!isPlaying ? (
+                        <button className='playlistButton' id="play" onClick={() => handlePlayPause(true)}><FontAwesomeIcon icon={faPlay} /></button>
+                    ) : (
+                        <button className='playlistButton' id="play" onClick={() => handlePlayPause(false)}><FontAwesomeIcon icon={faPause} /></button>
+                    )}
+                    <button className='playlistButton' id="next-song" onClick={() => handleChangeSong(currSong + 1)}><FontAwesomeIcon icon={faForward} /></button>
+                    <button className='playlistButton' id="download-song" onClick={() => {
                         const a = document.createElement('a');
-                        const songRef = ref(storage, song.song_file)
+                        const songRef = ref(storage, songs[currSong].song_file)
                         getDownloadURL(songRef)
                             .then((url) => {
                                 a.href = url;
-                                a.download = `${song.song_name}.mp3`;
+                                a.download = `${songs[currSong].song_name}.mp3`;
                                 a.target = "_blank"
                                 a.click();
                             })
@@ -110,20 +111,26 @@ export const SongCardPlaylist = ({ song, nextSong }) => {
                                         break;
                                 }
                             })
-                    }}
-                >
-                    <svg className="svgIcon" viewBox="0 0 384 512" height="1em" xmlns="http://www.w3.org/2000/svg"><path d="M169.4 470.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 370.8 224 64c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 306.7L54.6 265.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"></path></svg>
-                    <span className="icon2"></span>
-                    <span className="tooltip">Download</span>
-                </button>
-                <audio
-                    ref={audioRef}
-                    src={song.song_file}
-                    onLoadedMetadata={handleLoadedMetadata}
-                    onTimeUpdate={() => setCurrentTimeFormat(audioRef.current.currentTime)}
-                    onPause={() => handlePlayPause(false)}
-                    onEnded={handleSongEnded}
-                />
+                    }}><FontAwesomeIcon icon={faDownload}
+                        />
+                    </button>
+                    <audio
+                        ref={audioRef}
+                        src={songs[currSong].song_file}
+                        onLoadedMetadata={handleLoadedMetadata}
+                        onTimeUpdate={() => setCurrentTimeFormat(audioRef.current.currentTime)}
+                        onPause={() => handlePlayPause(false)}
+                        onEnded={() => handleChangeSong(currSong + 1)}
+                    />
+                </div>
+            </div>
+
+            <div className='mt-4 card'>
+                {songs.map((song, index) => (
+                    <div key={song.song_id}>
+                        <span className='playlistElement' onClick={() => handleChangeSong(index)}>{index + 1} - {song.song_name}</span>
+                    </div>
+                ))}
             </div>
         </div>
     )
