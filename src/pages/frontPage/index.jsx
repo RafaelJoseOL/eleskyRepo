@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import { SongCard } from '../../components/songcard'
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { db } from "../../config/firebase-config";
 
-export const Home = ({ listOfSongs }) => {
+export const Home = ({ listOfSongs, isLogged, userID, userLikedSongs, setUserLikedSongs }) => {
     const [search, setSearch] = useState('');
     const [selectedTags, setSelectedTags] = useState([]);
     const [currSong, setCurrSong] = useState(null);
@@ -11,6 +13,49 @@ export const Home = ({ listOfSongs }) => {
         const matchesTags = selectedTags.length === 0 || selectedTags.some(tag => song.song_tags.includes(tag));
         return matchesSearch && matchesTags;
     });
+
+    const handleLikedSong = async (songID) => {
+        try {
+            if (isLogged && userID) {
+                const userDocRef = doc(db, 'users', userID);
+                const userDocSnap = await getDoc(userDocRef);
+
+                if (userDocSnap.exists()) {
+                    const updatedLikedSongs = userLikedSongs.includes(songID)
+                        ? userLikedSongs.filter((id) => id !== songID)
+                        : [...userLikedSongs, songID];
+
+                        setUserLikedSongs(updatedLikedSongs);
+
+                    await updateDoc(userDocRef, { user_likedSongs: updatedLikedSongs });
+
+                    console.log('Base de datos actualizada correctamente');
+                }
+            }
+        } catch (error) {
+            console.error('Error al actualizar la base de datos:', error);
+        }
+    };
+
+    useEffect(() => {
+        const fetchUserLikedSongs = async () => {
+            if (isLogged) {
+                try {
+                    const docRef = doc(db, "users", userID);
+                    const docSnap = await getDoc(docRef);
+                    if (docSnap.exists()) {
+                        const userData = docSnap.data();
+                        console.log(userData)
+                        setUserLikedSongs(userData.user_likedSongs || []);
+                    }
+                } catch (error) {
+                    console.error('Error al obtener las canciones que le gustan al usuario:', error);
+                }
+            }
+        };
+        fetchUserLikedSongs();
+    }, [isLogged]);
+
 
     return (
         <div className='container-fluid mainHome'>
@@ -53,6 +98,9 @@ export const Home = ({ listOfSongs }) => {
                                     song={song}
                                     currSong={currSong}
                                     setCurrSong={setCurrSong}
+                                    isLogged={isLogged}
+                                    liked={userLikedSongs.includes(song.song_id)}
+                                    handleLikedSong={handleLikedSong}
                                 />
                             </div>
                         ))}

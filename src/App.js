@@ -13,13 +13,18 @@ import {
   GoogleAuthProvider, getAuth, signInWithPopup, signOut,
   browserLocalPersistence, setPersistence, onAuthStateChanged
 } from "firebase/auth";
-import googleIcon from "./images/google.png"
+import googleIcon from "./images/google.png";
+import { useAddUser } from "./hooks/useAddUser";
 
 function App() {
   const [listOfSongs, setListOfSongs] = useState([]);
+  const [songsLiked, setSongsLiked] = useState([]);
   const [isLogged, setIsLogged] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [userLikedSongs, setUserLikedSongs] = useState([]);
+  const [userID, setUserID] = useState(0);
   const provider = new GoogleAuthProvider();
+  const { addUser } = useAddUser();
 
   useEffect(() => {
     const fetchSongs = async () => {
@@ -47,6 +52,7 @@ function App() {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         setIsLogged(true);
+        setUserID(user.uid);
         await checkAdminStatus(user.email);
       }
     });
@@ -70,18 +76,33 @@ function App() {
   }
 
   const handleGoogleLogin = async () => {
-    const auth = getAuth();
-    await setPersistence(auth, browserLocalPersistence);
-    signInWithPopup(auth, provider)
-      .then((result) => {
-        if (result.user) {
-          console.log("Inicio de sesión exitoso:", result.user);
-        } else {
-          console.log("El inicio de sesión no tuvo éxito.");
+    try {
+      const auth = getAuth();
+      await setPersistence(auth, browserLocalPersistence);
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      setUserID(user.uid);
+
+      const userRef = collection(db, "users");
+      const q = query(userRef, where("user_id", "==", user.uid.toString()));
+
+      const querySnapshot = await getDocs(q);
+      if (!querySnapshot.empty) {
+        console.log("Existe")
+      } else {
+        try {
+          addUser({ user_id: user.uid });
+          console.log("Usuario añadido");
+        } catch (error) {
+          console.error('Error al añadir usuario:', error);
         }
-      }).catch((error) => {
-        console.error("Error durante el inicio de sesión:", error);
-      });
+      }
+
+      console.log("Inicio de sesión exitoso:", user);
+      // window.location.reload();
+    } catch (error) {
+      console.error("Error durante el inicio de sesión:", error);
+    }
   };
 
   const handleGoogleLogout = async () => {
@@ -89,7 +110,8 @@ function App() {
       const auth = getAuth();
       await signOut(auth);
       setIsAdmin(false);
-      setIsLogged(false)
+      setIsLogged(false);
+      window.location.reload();
     } catch (error) {
       console.error("Error al cerrar la sesión:", error);
     }
@@ -133,9 +155,11 @@ function App() {
             </div>
           </nav>
           <Routes>
-            <Route path="/" exact element={<Home listOfSongs={listOfSongs} />} />
+            <Route path="/" exact element={<Home listOfSongs={listOfSongs} isLogged={isLogged} userID={userID}
+              userLikedSongs={userLikedSongs} setUserLikedSongs={setUserLikedSongs} />} />
             <Route path="/NewSong" exact element={<NewSong listOfSongs={listOfSongs} />} />
-            <Route path="/Playlist" exact element={<Playlist listOfSongs={listOfSongs} />} />
+            <Route path="/Playlist" exact element={<Playlist listOfSongs={listOfSongs} isLogged={isLogged}
+              userLikedSongs={userLikedSongs} setUserLikedSongs={setUserLikedSongs} />} />
           </Routes>
           <footer className="text-center text-white myFooter">
             <div className="container p-3 col-12 col-xl-3">

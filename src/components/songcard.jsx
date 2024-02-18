@@ -3,9 +3,9 @@ import { useRef, useState } from 'react';
 import { ref, getDownloadURL } from 'firebase/storage';
 import { storage } from "../config/firebase-config";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlay, faPause, faHeart, faDownload } from '@fortawesome/free-solid-svg-icons'
+import { faPlay, faPause, faHeart, faHeartBroken, faDownload } from '@fortawesome/free-solid-svg-icons'
 
-export const SongCard = ({ song, currSong, setCurrSong }) => {
+export const SongCard = ({ song, currSong, setCurrSong, isLogged, liked, handleLikedSong }) => {
     const audioRef = useRef();
     const [isPlaying, setIsPlaying] = useState(false);
     const [currentTime, setCurrentTime] = useState('00:00');
@@ -26,9 +26,9 @@ export const SongCard = ({ song, currSong, setCurrSong }) => {
         setDuration(formattedDuration);
     };
 
-    const handlePlayPause = (play) => {        
+    const handlePlayPause = (play) => {
         if (play) {
-            if(currSong != null){
+            if (currSong != null) {
                 currSong.audioRef.current.pause()
             }
             setCurrSong({ ...song, audioRef });
@@ -39,7 +39,6 @@ export const SongCard = ({ song, currSong, setCurrSong }) => {
             audioRef.current.pause();
         }
     };
-    
 
     const handleProgressClick = (e) => {
         const progressWidth = e.target.clientWidth;
@@ -65,11 +64,26 @@ export const SongCard = ({ song, currSong, setCurrSong }) => {
                 <div className="card__time card__time-left">{duration}</div>
             </div>
             <div className="card__wrapper mx-auto">
+                {isLogged && (
+                    <div>
+                        <button className='playlistButton' id="like-song" onClick={() => handleLikedSong(song.song_id)}>
+                            {liked ? (
+                                <FontAwesomeIcon icon={faHeartBroken} />
+                            ) : (
+                                <FontAwesomeIcon icon={faHeart} />
+                            )}
+                        </button>
+                    </div>
+                )}
                 {!isPlaying ? (
-                    <button className='playlistButton' id="play" onClick={() => handlePlayPause(true)}><FontAwesomeIcon icon={faPlay} /></button>
+                    <button className='playlistButton' id="play" onClick={() => handlePlayPause(true)}>
+                        <FontAwesomeIcon icon={faPlay} />
+                    </button>
                 ) :
                     (
-                        <button className='playlistButton' id="play" onClick={() => handlePlayPause(false)}><FontAwesomeIcon icon={faPause} /></button>
+                        <button className='playlistButton' id="play" onClick={() => handlePlayPause(false)}>
+                            <FontAwesomeIcon icon={faPause} />
+                        </button>
                     )}
                 <button className='playlistButton' id="download-song" onClick={() => {
                     const a = document.createElement('a');

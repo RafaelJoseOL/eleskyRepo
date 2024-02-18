@@ -2,7 +2,7 @@ import React from 'react'
 import { useState, useEffect } from 'react';
 import { SongCardPlaylist } from '../../components/songcardPlaylist'
 
-export const Playlist = ({ listOfSongs }) => {
+export const Playlist = ({ listOfSongs, isLogged, userID, userLikedSongs, setUserLikedSongs }) => {
   const [randomizedSongs, setRandomizedSongs] = useState([]);
   const [filteredSongs, setFilteredSongs] = useState([]);
   const [useEff, setUseEff] = useState(false);
@@ -26,6 +26,8 @@ export const Playlist = ({ listOfSongs }) => {
       case 'voz':
         setFilteredSongs(listOfSongs.filter(song => song.song_tags.includes("Voz")));
         break;
+      case 'liked':
+        setFilteredSongs(listOfSongs.filter(song => userLikedSongs.includes(song.song_id)));
       default:
         break;
     }
@@ -38,7 +40,9 @@ export const Playlist = ({ listOfSongs }) => {
         <button className='col-3 col-xl-1 mx-1 mx-xl-3' onClick={() => randomizeOrder("todo")}>Todas</button>
         <button className='col-3 col-xl-1 mx-1 mx-xl-3' onClick={() => randomizeOrder("piano")}>Solo piano</button>
         <button className='col-3 col-xl-1 mx-1 mx-xl-3' onClick={() => randomizeOrder("voz")}>Voz</button>
-        <button className='col-3 col-xl-1 mx-1 mx-xl-3'>Me gustan (soon)</button>
+        {isLogged && (
+          <button className='col-3 col-xl-1 mx-1 mx-xl-3' onClick={() => randomizeOrder("liked")}>Me gustan</button>
+        )}
       </div>
       <div className='my-4 d-flex justify-content-center'>
         {randomizedSongs.length > 0 && (
