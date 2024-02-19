@@ -41,7 +41,7 @@ export const Playlist = ({ listOfSongs, isLogged, userLikedSongs, volumen }) => 
         <button className='col-3 col-xl-1 mx-1 mx-xl-3 buttonPlaylist' onClick={() => randomizeOrder("piano")}>Solo piano</button>
         <button className='col-3 col-xl-1 mx-1 mx-xl-3 buttonPlaylist' onClick={() => randomizeOrder("voz")}>Voz</button>
         {isLogged && (
-          <button className='col-3 col-xl-1 mx-1 mx-xl-3 buttonPlaylist' onClick={() => randomizeOrder("liked")}>Me gustan</button>
+          <button className='col-3 col-xl-1 mx-1 mx-xl-3 buttonPlaylist' onClick={() => randomizeOrder("liked")}>Favoritas</button>
         )}
       </div>
       <div className='my-4 d-flex justify-content-center'>

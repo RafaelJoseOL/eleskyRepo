@@ -4,7 +4,7 @@ import 'bootstrap/dist/js/bootstrap.bundle.min';
 import { Home } from "./pages/frontPage/index";
 import { NewSong } from "./pages/newSong/index";
 import { Playlist } from "./pages/playlist/index";
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Link, Navigate  } from 'react-router-dom';
 import { SocialIcon } from 'react-social-icons'
 import { useState, useEffect } from 'react';
 import { collection, getDocs, query, where } from 'firebase/firestore';
@@ -16,14 +16,16 @@ import {
 import googleIcon from "./images/google.png";
 import { useAddUser } from "./hooks/useAddUser";
 
+import { Test } from "./pages/test";
+
 function App() {
   const [listOfSongs, setListOfSongs] = useState([]);
-  const [songsLiked, setSongsLiked] = useState([]);
   const [isLogged, setIsLogged] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [userLikedSongs, setUserLikedSongs] = useState([]);
   const [userID, setUserID] = useState(0);
   const [volumen, setVolumen] = useState(50);
+  const [loading, setLoading] = useState(true);
   const provider = new GoogleAuthProvider();
   const { addUser } = useAddUser();
 
@@ -44,6 +46,7 @@ function App() {
       } catch (error) {
         console.error('Error al obtener las canciones:', error);
       }
+      setLoading(false);
     };
     fetchSongs();
   }, []);
@@ -105,7 +108,8 @@ function App() {
       }
 
       console.log("Inicio de sesión exitoso:", user);
-      window.location.reload();
+      // window.location.reload();
+      // return <Navigate to="/Home"/>;
     } catch (error) {
       console.error("Error durante el inicio de sesión:", error);
     }
@@ -117,7 +121,8 @@ function App() {
       await signOut(auth);
       setIsAdmin(false);
       setIsLogged(false);
-      window.location.reload();
+      // window.location.reload();
+      // return <Navigate to="/Home"/>;
     } catch (error) {
       console.error("Error al cerrar la sesión:", error);
     }
@@ -157,16 +162,17 @@ function App() {
                     </button>
                   )}
                 </div>
-                <input type="range" min="0" max="100" value={volumen} onChange={handleVolumeChange} />
+                <input type="range" min="0" max="100" value={volumen} onChange={handleVolumeChange} className='volumeSlider' />
               </div>
             </div>
           </nav>
           <Routes>
             <Route path="/" exact element={<Home listOfSongs={listOfSongs} isLogged={isLogged} userID={userID}
-              userLikedSongs={userLikedSongs} setUserLikedSongs={setUserLikedSongs} volumen={volumen}/>} />
+              userLikedSongs={userLikedSongs} setUserLikedSongs={setUserLikedSongs} volumen={volumen} loading={loading}/>} />
             <Route path="/NewSong" exact element={<NewSong listOfSongs={listOfSongs} />} />
             <Route path="/Playlist" exact element={<Playlist listOfSongs={listOfSongs} isLogged={isLogged}
               userLikedSongs={userLikedSongs} setUserLikedSongs={setUserLikedSongs} volumen={volumen}/>} />
+            <Route path="/Test" exact element={<Test />} />
           </Routes>
           <footer className="text-center text-white myFooter">
             <div className="container p-3 col-12 col-xl-3">

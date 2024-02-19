@@ -3,7 +3,7 @@ import { SongCard } from '../../components/songcard'
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db } from "../../config/firebase-config";
 
-export const Home = ({ listOfSongs, isLogged, userID, userLikedSongs, setUserLikedSongs, volumen }) => {
+export const Home = ({ listOfSongs, isLogged, userID, userLikedSongs, setUserLikedSongs, volumen, loading }) => {
     const [search, setSearch] = useState('');
     const [selectedTags, setSelectedTags] = useState({});
     const [currSong, setCurrSong] = useState(null);
@@ -87,6 +87,10 @@ export const Home = ({ listOfSongs, isLogged, userID, userLikedSongs, setUserLik
                                 <input type="checkbox" checked={selectedTags['Concierto']} onChange={() => toggleTagFilter('Concierto')} />
                                 <span className='ms-1'>Concierto</span>
                             </label>
+                            <label>
+                                <input type="checkbox" checked={selectedTags['']} onChange={() => toggleTagFilter('')} />
+                                <span className='ms-1'>Mashups (maybe?)</span>
+                            </label>
                         </div>
                     </div>
                 </div>
@@ -107,7 +111,7 @@ export const Home = ({ listOfSongs, isLogged, userID, userLikedSongs, setUserLik
                                 />
                             </div>
                         ))}
-                        {filteredSongs.length == 0 && (
+                        {(filteredSongs.length == 0 && !loading) && (
                             <div className='ms-5 mt-2 fw-bold'>
                                 No hay canciones que coincidan con tu búsqueda.
                             </div>
