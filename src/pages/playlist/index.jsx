@@ -2,7 +2,7 @@ import React from 'react'
 import { useState, useEffect } from 'react';
 import { SongCardPlaylist } from '../../components/songcardPlaylist'
 
-export const Playlist = ({ listOfSongs, isLogged, userLikedSongs, volumen }) => {
+export const Playlist = ({ listOfSongs, isLogged, userLikedSongs, volumen, listOfTags }) => {
   const [randomizedSongs, setRandomizedSongs] = useState([]);
   const [filteredSongs, setFilteredSongs] = useState([]);
   const [useEff, setUseEff] = useState(false);

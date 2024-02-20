@@ -4,10 +4,10 @@ import 'bootstrap/dist/js/bootstrap.bundle.min';
 import { Home } from "./pages/frontPage/index";
 import { NewSong } from "./pages/newSong/index";
 import { Playlist } from "./pages/playlist/index";
-import { BrowserRouter as Router, Route, Routes, Link, Navigate  } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Link, Navigate } from 'react-router-dom';
 import { SocialIcon } from 'react-social-icons'
 import { useState, useEffect } from 'react';
-import { collection, getDocs, query, where } from 'firebase/firestore';
+import { collection, getDocs, query, where, doc, getDoc } from 'firebase/firestore';
 import { db } from "./config/firebase-config";
 import {
   GoogleAuthProvider, getAuth, signInWithPopup, signOut,
@@ -20,6 +20,7 @@ import { Test } from "./pages/test";
 
 function App() {
   const [listOfSongs, setListOfSongs] = useState([]);
+  const [listOfTags, setListOfTags] = useState([]);
   const [isLogged, setIsLogged] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [userLikedSongs, setUserLikedSongs] = useState([]);
@@ -42,6 +43,7 @@ function App() {
             song_file: doc.data().song_file
           };
         });
+        // let sortedSongs = songsData.sort((a, b) => a.localeCompare(b));
         setListOfSongs(songsData);
       } catch (error) {
         console.error('Error al obtener las canciones:', error);
@@ -49,6 +51,24 @@ function App() {
       setLoading(false);
     };
     fetchSongs();
+  }, []);
+
+  useEffect(() => {
+    const fetchTags = async () => {
+      try {
+        const docRef = doc(db, "tags", "50tMAIpnUZiPQMXirgHN");
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          const tagsData = docSnap.data().tag_names.sort((a, b) => a.localeCompare(b));
+          setListOfTags(tagsData);
+        } else {
+          console.log("No se encontró el documento");
+        }
+      } catch (error) {
+        console.error('Error al obtener las etiquetas:', error);
+      }
+    };
+    fetchTags();
   }, []);
 
   useEffect(() => {
@@ -108,8 +128,6 @@ function App() {
       }
 
       console.log("Inicio de sesión exitoso:", user);
-      // window.location.reload();
-      // return <Navigate to="/Home"/>;
     } catch (error) {
       console.error("Error durante el inicio de sesión:", error);
     }
@@ -121,8 +139,6 @@ function App() {
       await signOut(auth);
       setIsAdmin(false);
       setIsLogged(false);
-      // window.location.reload();
-      // return <Navigate to="/Home"/>;
     } catch (error) {
       console.error("Error al cerrar la sesión:", error);
     }
@@ -168,10 +184,12 @@ function App() {
           </nav>
           <Routes>
             <Route path="/" exact element={<Home listOfSongs={listOfSongs} isLogged={isLogged} userID={userID}
-              userLikedSongs={userLikedSongs} setUserLikedSongs={setUserLikedSongs} volumen={volumen} loading={loading}/>} />
-            <Route path="/NewSong" exact element={<NewSong listOfSongs={listOfSongs} />} />
+              userLikedSongs={userLikedSongs} setUserLikedSongs={setUserLikedSongs} volumen={volumen}
+              loading={loading} listOfTags={listOfTags} />} />
+            <Route path="/NewSong" exact element={<NewSong listOfSongs={listOfSongs} listOfTags={listOfTags} />} />
             <Route path="/Playlist" exact element={<Playlist listOfSongs={listOfSongs} isLogged={isLogged}
-              userLikedSongs={userLikedSongs} setUserLikedSongs={setUserLikedSongs} volumen={volumen}/>} />
+              userLikedSongs={userLikedSongs} setUserLikedSongs={setUserLikedSongs} volumen={volumen}
+              listOfTags={listOfTags} />} />
             <Route path="/Test" exact element={<Test />} />
           </Routes>
           <footer className="text-center text-white myFooter">

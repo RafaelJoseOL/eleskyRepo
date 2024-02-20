@@ -3,7 +3,7 @@ import * as Yup from 'yup';
 import { useAddSong } from "../../hooks/useAddSong"
 import { useState, useEffect } from 'react';
 
-export const NewSong = ({ authState, listOfSongs }) => {
+export const NewSong = ({ authState, listOfSongs, listOfTags }) => {
     // const [availableTags, setAvailableTags] = useState([]);
     const { addSong } = useAddSong();
     const [song, setSong] = useState(""); 
@@ -83,16 +83,20 @@ export const NewSong = ({ authState, listOfSongs }) => {
                                         <Field type='checkbox' name='tags' value={"Piano"} className='form-check-input' />
                                         <label className='form-check-label'>{"Piano"}</label>
                                     </div>
+                                    <div className='form-check form-check-inline'>
+                                        <Field type='checkbox' name='tags' value={"Mashup"} className='form-check-input' />
+                                        <label className='form-check-label'>{"Mashup"}</label>
+                                    </div>
                                 </div>
                             </div>
-                            {/* <div id='checkbox-group' className='d-flex flex-wrap mt-3'>
-                                {availableTags.sort((a, b) => a.localeCompare(b)).map((tag, index) => (
+                            <div id='checkbox-group' className='d-flex justify-content-center flex-wrap mt-3'>
+                                {listOfTags.sort((a, b) => a.localeCompare(b)).map((tag, index) => (
                                     <div key={index} className='form-check form-check-inline'>
                                         <Field type='checkbox' name='tags' value={tag} className='form-check-input' />
                                         <label className='form-check-label'>{tag}</label>
                                     </div>
                                 ))}
-                            </div> */}
+                            </div>
                             <ErrorMessage name='tags' component='p' className='text-danger'></ErrorMessage>
                         </div>
                         <div className='row justify-content-center mx-auto'>

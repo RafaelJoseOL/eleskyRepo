@@ -3,7 +3,7 @@ import { SongCard } from '../../components/songcard'
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db } from "../../config/firebase-config";
 
-export const Home = ({ listOfSongs, isLogged, userID, userLikedSongs, setUserLikedSongs, volumen, loading }) => {
+export const Home = ({ listOfSongs, isLogged, userID, userLikedSongs, setUserLikedSongs, volumen, loading, listOfTags }) => {
     const [search, setSearch] = useState('');
     const [selectedTags, setSelectedTags] = useState({});
     const [currSong, setCurrSong] = useState(null);
@@ -60,7 +60,8 @@ export const Home = ({ listOfSongs, isLogged, userID, userLikedSongs, setUserLik
     return (
         <div className='container-fluid mainHome'>
             <div className='row'>
-                <div className='col-12 col-md-1 sideBar text-light ms-4 mt-3 d-flex flex-column text-align-center'>
+                <div className='col-10 col-md-2 sideBar text-light ms-4 mt-3'>
+                {/* <div className='col-10 col-md-2 sideBar text-light ms-4 mt-3 d-flex flex-column text-align-center'> */}
                     <div className='searchBar mt-3 mx-auto'>
                         <input
                             type="text"
@@ -71,30 +72,46 @@ export const Home = ({ listOfSongs, isLogged, userID, userLikedSongs, setUserLik
                         />
                     </div>
                     <div className='mt-2 mx-auto'>
-                        <label>Filtrar:</label>
+                        <label>Tipo:</label>
                         <div className='mt-2'>
-                            <label>
-                                <input type="checkbox" checked={selectedTags['Piano']} onChange={() => toggleTagFilter('Piano')} />
-                                <span className='ms-1'>Piano</span>
-                            </label>
+                            <div>
+                                <label>
+                                    <input type="checkbox" checked={selectedTags['Piano']} onChange={() => toggleTagFilter('Piano')} />
+                                    <span className='ms-1'>Piano</span>
+                                </label>
+                            </div>
+                            <div>
+                                <label>
+                                    <input type="checkbox" checked={selectedTags['Voz']} onChange={() => toggleTagFilter('Voz')} />
+                                    <span className='ms-1'>Voz</span>
+                                </label>
+                            </div>
+                            <div>
+                                <label>
+                                    <input type="checkbox" checked={selectedTags['Concierto']} onChange={() => toggleTagFilter('Concierto')} />
+                                    <span className='ms-1'>Concierto</span>
+                                </label>
+                            </div>
+                            <div>
+                                <label>
+                                    <input type="checkbox" checked={selectedTags['Mashup']} onChange={() => toggleTagFilter('Mashup')} />
+                                    <span className='ms-1'>Mashups</span>
+                                </label>
+                            </div>
                             <br />
-                            <label>
-                                <input type="checkbox" checked={selectedTags['Voz']} onChange={() => toggleTagFilter('Voz')} />
-                                <span className='ms-1'>Voz</span>
-                            </label>
-                            <br />
-                            <label>
-                                <input type="checkbox" checked={selectedTags['Concierto']} onChange={() => toggleTagFilter('Concierto')} />
-                                <span className='ms-1'>Concierto</span>
-                            </label>
-                            <label>
-                                <input type="checkbox" checked={selectedTags['']} onChange={() => toggleTagFilter('')} />
-                                <span className='ms-1'>Mashups (maybe?)</span>
-                            </label>
+                            <label className='mb-2'>Sección:</label>
+                            {listOfTags.map((tag, index) => (                                
+                                <div key={index}>
+                                    <label>
+                                        <input type="checkbox" defaultChecked={selectedTags[tag]} onChange={() => toggleTagFilter(tag)} />
+                                        <span className='ms-1'>{(tag)}</span>
+                                    </label>
+                                </div>
+                            ))}                        
                         </div>
                     </div>
                 </div>
-                <div className='col-9 songs mt-4 mx-auto'>
+                <div className='col-8 songs mt-4 mx-auto'>
                     <div className='row'>
                         {filteredSongs.map((song, index) => (
                             <div className='song col-10 col-md-8 col-lg-7 col-xl-6 col-xxl-4 mx-auto song mb-4 d-flex flex-column align-items-center justify-content-center' key={index}>
