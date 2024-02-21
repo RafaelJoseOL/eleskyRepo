@@ -60,8 +60,8 @@ export const Home = ({ listOfSongs, isLogged, userID, userLikedSongs, setUserLik
     return (
         <div className='container-fluid mainHome'>
             <div className='row'>
-                <div className='col-10 col-md-2 sideBar text-light ms-4 mt-3'>
-                {/* <div className='col-10 col-md-2 sideBar text-light ms-4 mt-3 d-flex flex-column text-align-center'> */}
+                <div className='d-none d-md-block col-10 col-md-2 sideBar text-light ms-4 mt-3'>
+                    {/* <div className='col-10 col-md-2 sideBar text-light ms-4 mt-3 d-flex flex-column text-align-center'> */}
                     <div className='searchBar mt-3 mx-auto'>
                         <input
                             type="text"
@@ -100,14 +100,71 @@ export const Home = ({ listOfSongs, isLogged, userID, userLikedSongs, setUserLik
                             </div>
                             <br />
                             <label className='mb-2'>Sección:</label>
-                            {listOfTags.map((tag, index) => (                                
+                            {listOfTags.map((tag, index) => (
                                 <div key={index}>
                                     <label>
                                         <input type="checkbox" defaultChecked={selectedTags[tag]} onChange={() => toggleTagFilter(tag)} />
                                         <span className='ms-1'>{(tag)}</span>
                                     </label>
                                 </div>
-                            ))}                        
+                            ))}
+                        </div>
+                    </div>
+                </div>
+                <div className='d-md-none d-md-block mt-3'>
+                    <p className='col-md-12 text-center'>
+                        <button className="filterButton" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
+                            Búsqueda/Filtro
+                        </button>
+                    </p>
+                    <div className="collapse text-align-center" id="collapseFilter">
+                        <div className='searchBar mt-3 mx-auto'>
+                            <input
+                                type="text"
+                                placeholder="Buscar por nombre"
+                                value={search}
+                                maxLength={20}
+                                onChange={(e) => setSearch(e.target.value)}
+                            />
+                        </div>
+                        <div className='mt-2 mx-auto'>
+                            <label>Tipo:</label>
+                            <div className='mt-2'>
+                                <div>
+                                    <label>
+                                        <input type="checkbox" checked={selectedTags['Piano']} onChange={() => toggleTagFilter('Piano')} />
+                                        <span className='ms-1'>Piano</span>
+                                    </label>
+                                </div>
+                                <div>
+                                    <label>
+                                        <input type="checkbox" checked={selectedTags['Voz']} onChange={() => toggleTagFilter('Voz')} />
+                                        <span className='ms-1'>Voz</span>
+                                    </label>
+                                </div>
+                                <div>
+                                    <label>
+                                        <input type="checkbox" checked={selectedTags['Concierto']} onChange={() => toggleTagFilter('Concierto')} />
+                                        <span className='ms-1'>Concierto</span>
+                                    </label>
+                                </div>
+                                <div>
+                                    <label>
+                                        <input type="checkbox" checked={selectedTags['Mashup']} onChange={() => toggleTagFilter('Mashup')} />
+                                        <span className='ms-1'>Mashups</span>
+                                    </label>
+                                </div>
+                                <br />
+                                <label className='mb-2'>Sección:</label>
+                                {listOfTags.map((tag, index) => (
+                                    <div key={index}>
+                                        <label>
+                                            <input type="checkbox" defaultChecked={selectedTags[tag]} onChange={() => toggleTagFilter(tag)} />
+                                            <span className='ms-1'>{(tag)}</span>
+                                        </label>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     </div>
                 </div>

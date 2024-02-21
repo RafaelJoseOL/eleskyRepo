@@ -43,7 +43,6 @@ function App() {
             song_file: doc.data().song_file
           };
         });
-        // let sortedSongs = songsData.sort((a, b) => a.localeCompare(b));
         setListOfSongs(songsData);
       } catch (error) {
         console.error('Error al obtener las canciones:', error);
@@ -161,11 +160,21 @@ function App() {
                 <span className="navbar-toggler-icon"></span>
               </button>
               <div className="collapse navbar-collapse navbar-custom" id="navbarSupportedContent">
-                <div className='mb-2 mb-lg-0 ms-4'>
-                  <Link to="/Playlist" className="navbar-brand ms-4">Playlist</Link>
+                <div className='row'>
+                  <div className='col-12 col-lg-4'>
+                    <Link to="/Playlist" className="navbar-brand ms-4">Playlist</Link>
+                  </div>
                   {isAdmin && (
-                    <Link to="/NewSong" className="navbar-brand ms-4">Añadir canción</Link>
+                    <div className='col-12 col-lg-4'>
+                      <Link to="/NewSong" className="navbar-brand ms-4">Añadir canción</Link>
+                    </div>
                   )}
+                </div>
+                <div className='col-12 col-lg-4'>
+                  <label className='navbar-brand ms-4'>Volumen global: </label>
+                  <input type="range" min="0" max="100" value={volumen} onChange={handleVolumeChange} className='volumeSlider' />
+                </div>
+                <div className="ms-auto mb-2">
                   {!isLogged ? (
                     <button className="navbar-brand ms-4 log-btn" onClick={handleGoogleLogin}>
                       <img src={googleIcon} className='log-img me-3' />
@@ -178,10 +187,10 @@ function App() {
                     </button>
                   )}
                 </div>
-                <input type="range" min="0" max="100" value={volumen} onChange={handleVolumeChange} className='volumeSlider' />
               </div>
             </div>
           </nav>
+
           <Routes>
             <Route path="/" exact element={<Home listOfSongs={listOfSongs} isLogged={isLogged} userID={userID}
               userLikedSongs={userLikedSongs} setUserLikedSongs={setUserLikedSongs} volumen={volumen}

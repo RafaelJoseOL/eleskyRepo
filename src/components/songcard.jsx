@@ -82,7 +82,7 @@ export const SongCard = ({ song, currSong, setCurrSong, isLogged, liked, handleL
             <div className="card__wrapper mx-auto">
                 {isLogged && (
                     <div>
-                        <button className='playlistButton' id="like-song" onClick={() => handleLikedSong(song.song_id)}>
+                        <button className='playlistButton rounded-circle' id="like-song" onClick={() => handleLikedSong(song.song_id)}>
                             {liked ? (
                                 <FontAwesomeIcon icon={faHeartBroken} />
                             ) : (
@@ -92,16 +92,16 @@ export const SongCard = ({ song, currSong, setCurrSong, isLogged, liked, handleL
                     </div>
                 )}
                 {!isPlaying ? (
-                    <button className='playlistButton' id="play" onClick={() => handlePlayPause(true)}>
+                    <button className='playlistButton rounded-circle' id="play" onClick={() => handlePlayPause(true)}>
                         <FontAwesomeIcon icon={faPlay} />
                     </button>
                 ) :
                     (
-                        <button className='playlistButton' id="play" onClick={() => handlePlayPause(false)}>
+                        <button className='playlistButton rounded-circle' id="play" onClick={() => handlePlayPause(false)}>
                             <FontAwesomeIcon icon={faPause} />
                         </button>
                     )}
-                <button className='playlistButton' id="download-song" onClick={() => {
+                <button className='playlistButton rounded-circle' id="download-song" onClick={() => {
                     const a = document.createElement('a');
                     const songRef = ref(storage, song.song_file)
                     getDownloadURL(songRef)

@@ -87,14 +87,14 @@ export const SongCardPlaylist = ({ songs, volumen }) => {
                     <div className="card__time card__time-left">{duration}</div>
                 </div>
                 <div className="card__wrapper mx-auto">
-                    <button className='playlistButton' id="previous-song" onClick={() => handleChangeSong(currSong - 1)}><FontAwesomeIcon icon={faBackward} /></button>
+                    <button className='playlistButton rounded-circle' id="previous-song" onClick={() => handleChangeSong(currSong - 1)}><FontAwesomeIcon icon={faBackward} /></button>
                     {!isPlaying ? (
-                        <button className='playlistButton' id="play" onClick={() => handlePlayPause(true)}><FontAwesomeIcon icon={faPlay} /></button>
+                        <button className='playlistButton rounded-circle' id="play" onClick={() => handlePlayPause(true)}><FontAwesomeIcon icon={faPlay} /></button>
                     ) : (
-                        <button className='playlistButton' id="play" onClick={() => handlePlayPause(false)}><FontAwesomeIcon icon={faPause} /></button>
+                        <button className='playlistButton rounded-circle' id="play" onClick={() => handlePlayPause(false)}><FontAwesomeIcon icon={faPause} /></button>
                     )}
-                    <button className='playlistButton' id="next-song" onClick={() => handleChangeSong(currSong + 1)}><FontAwesomeIcon icon={faForward} /></button>
-                    <button className='playlistButton' id="download-song" onClick={() => {
+                    <button className='playlistButton rounded-circle' id="next-song" onClick={() => handleChangeSong(currSong + 1)}><FontAwesomeIcon icon={faForward} /></button>
+                    <button className='playlistButton rounded-circle' id="download-song" onClick={() => {
                         const a = document.createElement('a');
                         const songRef = ref(storage, songs[currSong].song_file)
                         getDownloadURL(songRef)

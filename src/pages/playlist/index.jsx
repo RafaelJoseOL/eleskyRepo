@@ -16,33 +16,29 @@ export const Playlist = ({ listOfSongs, isLogged, userLikedSongs, volumen, listO
   }, [useEff]);
 
   const randomizeOrder = (tag) => {
-    switch (tag) {
-      case 'todo':
-        setFilteredSongs(listOfSongs);
-        break;
-      case 'piano':
-        setFilteredSongs(listOfSongs.filter(song => song.song_tags.includes("Piano")));
-        break;
-      case 'voz':
-        setFilteredSongs(listOfSongs.filter(song => song.song_tags.includes("Voz")));
-        break;
-      case 'liked':
-        setFilteredSongs(listOfSongs.filter(song => userLikedSongs.includes(song.song_id)));
-      default:
-        break;
+    if (tag === "todo") {
+      setFilteredSongs(listOfSongs);
+    } else if (tag === "liked") {
+      setFilteredSongs(listOfSongs.filter(song => userLikedSongs.includes(song.song_id)));
+    } else {
+      setFilteredSongs(listOfSongs.filter(song => song.song_tags.includes(tag)));
     }
     setUseEff(!useEff);
   };
 
   return (
-    <div className='col-10 mx-auto'>
-      <div className='d-flex justify-content-center mt-4'>
-        <button className='col-3 col-xl-1 mx-1 mx-xl-3 buttonPlaylist' onClick={() => randomizeOrder("todo")}>Todas</button>
-        <button className='col-3 col-xl-1 mx-1 mx-xl-3 buttonPlaylist' onClick={() => randomizeOrder("piano")}>Solo piano</button>
-        <button className='col-3 col-xl-1 mx-1 mx-xl-3 buttonPlaylist' onClick={() => randomizeOrder("voz")}>Voz</button>
+    <div className='col-10 mx-auto z-0 text-center'>
+      <div className='mt-4'>
         {isLogged && (
-          <button className='col-3 col-xl-1 mx-1 mx-xl-3 buttonPlaylist' onClick={() => randomizeOrder("liked")}>Favoritas</button>
+          <button className='col-4 mt-2 col-xl-1 mx-1 mx-xl-3 buttonPlaylist' onClick={() => randomizeOrder("liked")}>Favoritas</button>
         )}
+        <button className='col-4 mt-2 col-xl-1 mx-1 mx-xl-3 buttonPlaylist' onClick={() => randomizeOrder("todo")}>Todas</button>
+        <button className='col-4 mt-2 col-xl-1 mx-1 mx-xl-3 buttonPlaylist' onClick={() => randomizeOrder("Piano")}>Piano</button>
+        <button className='col-4 mt-2 col-xl-1 mx-1 mx-xl-3 buttonPlaylist' onClick={() => randomizeOrder("Voz")}>Voz</button>
+        <button className='col-4 mt-2 col-xl-1 mx-1 mx-xl-3 buttonPlaylist' onClick={() => randomizeOrder("Concierto")}>Concierto</button>
+        {listOfTags.map((tag, index) => (
+          <button className='col-4 mt-2 col-xl-1 mx-1 mx-xl-3 buttonPlaylist' onClick={() => randomizeOrder(tag)} key={index}>{tag}</button>
+        ))}
       </div>
       <div className='my-4 d-flex justify-content-center'>
         {randomizedSongs.length > 0 && (
