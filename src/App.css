@@ -6,10 +6,8 @@
   --color2: #219ebc;
   --color3: #023047;
   --color4: #ffffff;
-  /* --color4: #ffb703; */
   --color5: #000000;
-  --color6: #6ce2ffc2;
-  /* --color5: #fb8500; */
+  --color6: #99fcffc6;
 }
 
 /* :root {
@@ -92,7 +90,6 @@ footer {
   cursor: pointer;
   position: relative;
   transition-duration: .3s;
-  /* box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.11); */
 }
 
 .svgIcon {
@@ -268,10 +265,6 @@ footer {
 
 /* Playlist */
 
-/* .playlistSongs {
-  background-color: var(--color3);
-} */
-
 .filterButton {
   color: var(--color5);
   background-color: var(--color6);
@@ -284,6 +277,7 @@ footer {
 .playlistButton {
   color: var(--color5);
   background-color: var(--color6);
+  /* border: none; */
   width: 35px;
   height: 35px;
 }

@@ -60,8 +60,7 @@ export const Home = ({ listOfSongs, isLogged, userID, userLikedSongs, setUserLik
     return (
         <div className='container-fluid mainHome'>
             <div className='row'>
-                <div className='d-none d-md-block col-10 col-md-2 sideBar text-light ms-4 mt-3'>
-                    {/* <div className='col-10 col-md-2 sideBar text-light ms-4 mt-3 d-flex flex-column text-align-center'> */}
+                <div className='d-none d-md-block col-10 col-md-2 sideBar text-light ms-4 mt-3'>                    
                     <div className='searchBar mt-3 mx-auto'>
                         <input
                             type="text"

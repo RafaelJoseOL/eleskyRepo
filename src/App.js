@@ -4,6 +4,7 @@ import 'bootstrap/dist/js/bootstrap.bundle.min';
 import { Home } from "./pages/frontPage/index";
 import { NewSong } from "./pages/newSong/index";
 import { Playlist } from "./pages/playlist/index";
+import { Error404 } from "./pages/error/Error404";
 import { BrowserRouter as Router, Route, Routes, Link, Navigate } from 'react-router-dom';
 import { SocialIcon } from 'react-social-icons'
 import { useState, useEffect } from 'react';
@@ -200,6 +201,7 @@ function App() {
               userLikedSongs={userLikedSongs} setUserLikedSongs={setUserLikedSongs} volumen={volumen}
               listOfTags={listOfTags} />} />
             <Route path="/Test" exact element={<Test />} />
+            <Route path="/*" exact element={<Error404 />} />
           </Routes>
           <footer className="text-center text-white myFooter">
             <div className="container p-3 col-12 col-xl-3">
@@ -212,7 +214,7 @@ function App() {
                       className='img-fluid rounded-circle linktrIcon'
                     />
                   </a>
-                  <div className="icon-subtext">Linktr</div>
+                  <div className="icon-subtext">Enlaces</div>
                 </div>
                 <div className='conciertos col-3'>
                   <a href="https://lnk.bio/Elesky" target="_blank" rel="noreferrer noopener">
