@@ -101,7 +101,13 @@ export const SongCard = ({ song, currSong, setCurrSong, isLogged, liked, handleL
                             <FontAwesomeIcon icon={faPause} />
                         </button>
                     )}
-                <button className='playlistButton rounded-circle' id="download-song" onClick={() => {
+                <button
+                    className='playlistButton rounded-circle'
+                    id="download-song"
+                    onClick={() => { window.open(song.song_file, "_blank") }}>
+                    <FontAwesomeIcon icon={faDownload} />
+                </button>
+                {/* <button className='playlistButton rounded-circle' id="download-song" onClick={() => {
                     const a = document.createElement('a');
                     const songRef = ref(storage, song.song_file)
                     getDownloadURL(songRef)
@@ -127,10 +133,11 @@ export const SongCard = ({ song, currSong, setCurrSong, isLogged, liked, handleL
                         })
                 }}><FontAwesomeIcon icon={faDownload}
                     />
-                </button>
+                </button> */}
                 <audio
                     ref={audioRef}
                     src={song.song_file}
+                    type="audio/mpeg"
                     onLoadedMetadata={handleLoadedMetadata}
                     onTimeUpdate={() => setCurrentTimeFormat(audioRef.current.currentTime)}
                     onPause={() => handlePlayPause(false)}

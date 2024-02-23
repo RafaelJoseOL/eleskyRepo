@@ -60,7 +60,7 @@ export const Home = ({ listOfSongs, isLogged, userID, userLikedSongs, setUserLik
     return (
         <div className='container-fluid mainHome'>
             <div className='row'>
-                <div className='d-none d-md-block col-10 col-md-2 sideBar text-light ms-4 mt-3'>                    
+                <div className='d-none d-md-block col-10 col-md-2 sideBar text-light ms-4 mt-3'>
                     <div className='searchBar mt-3 mx-auto'>
                         <input
                             type="text"
@@ -75,14 +75,20 @@ export const Home = ({ listOfSongs, isLogged, userID, userLikedSongs, setUserLik
                         <div className='mt-2'>
                             <div>
                                 <label>
+                                    <input type="checkbox" checked={selectedTags['Voz']} onChange={() => toggleTagFilter('Voz')} />
+                                    <span className='ms-1'>Voz</span>
+                                </label>
+                            </div>
+                            <div>
+                                <label>
                                     <input type="checkbox" checked={selectedTags['Piano']} onChange={() => toggleTagFilter('Piano')} />
                                     <span className='ms-1'>Piano</span>
                                 </label>
                             </div>
                             <div>
                                 <label>
-                                    <input type="checkbox" checked={selectedTags['Voz']} onChange={() => toggleTagFilter('Voz')} />
-                                    <span className='ms-1'>Voz</span>
+                                    <input type="checkbox" checked={selectedTags['Guitarra']} onChange={() => toggleTagFilter('Guitarra')} />
+                                    <span className='ms-1'>Guitarra</span>
                                 </label>
                             </div>
                             <div>
@@ -137,14 +143,20 @@ export const Home = ({ listOfSongs, isLogged, userID, userLikedSongs, setUserLik
                             <div className='mt-2'>
                                 <div>
                                     <label>
+                                        <input type="checkbox" checked={selectedTags['Voz']} onChange={() => toggleTagFilter('Voz')} />
+                                        <span className='ms-1'>Voz</span>
+                                    </label>
+                                </div>
+                                <div>
+                                    <label>
                                         <input type="checkbox" checked={selectedTags['Piano']} onChange={() => toggleTagFilter('Piano')} />
                                         <span className='ms-1'>Piano</span>
                                     </label>
                                 </div>
                                 <div>
                                     <label>
-                                        <input type="checkbox" checked={selectedTags['Voz']} onChange={() => toggleTagFilter('Voz')} />
-                                        <span className='ms-1'>Voz</span>
+                                        <input type="checkbox" checked={selectedTags['Guitarra']} onChange={() => toggleTagFilter('Guitarra')} />
+                                        <span className='ms-1'>Guitarra</span>
                                     </label>
                                 </div>
                                 <div>

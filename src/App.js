@@ -34,7 +34,7 @@ function App() {
   useEffect(() => {
     const fetchSongs = async () => {
       try {
-        const q = query(collection(db, "songs"));
+        const q = query(collection(db, "songsDocs"));
         const querySnapshot = await getDocs(q);
         const songsData = querySnapshot.docs.map((doc) => {
           return {

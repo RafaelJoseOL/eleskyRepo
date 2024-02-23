@@ -4,51 +4,37 @@ import { useAddSong } from "../../hooks/useAddSong"
 import { useState, useEffect } from 'react';
 
 export const NewSong = ({ authState, listOfSongs, listOfTags }) => {
-    // const [availableTags, setAvailableTags] = useState([]);
     const { addSong } = useAddSong();
     const [song, setSong] = useState(""); 
 
-    // useEffect(() => {
-    //     const fetchTags = async () => {
-    //         try {
-    //             const q = query(collection(db, "tags"));
-    //             const querySnapshot = await getDocs(q);
-    //             const tagsData = querySnapshot.docs.map((doc) => doc.data().tag_name);
-    //             setAvailableTags(tagsData);
-    //             console.log(tagsData);
-    //         } catch (error) {
-    //             console.error('Error al obtener las etiquetas:', error);
-    //         }
-    //     };
-
-    //     fetchTags();
-    // }, []);
-
     const initialValues = {
         name: '',
+        link: '',
         tags: [],
-        audioFile: "",
+        // audioFile: "",
     };
 
     const validationSchema = Yup.object().shape({
         name: Yup.string().min(3).max(50).required('Introduce el nombre de la canción.'),
+        link: Yup.string().min(3).required('Introduce el enlace del archivo.'),
         tags: Yup.array().min(1, 'Selecciona al menos una etiqueta.').of(Yup.string().required()).required(),
         // audioFile: Yup.mixed().required('Selecciona un archivo de audio.'),
     });
 
-    function handleChange(event) {
-        console.log(event)
-        setSong(event.target.files[0]);
-        console.log(song)
-    }
+    // function handleChange(event) {
+    //     console.log(event)
+    //     setSong(event.target.files[0]);
+    //     console.log(song)
+    // }
 
     const onSubmit = async (values, { setSubmitting }) => {
         setSubmitting(true);
         const song_name = values.name;
         const song_tags = values.tags;
-        const song_file = song;
+        // const song_file = song;
+        const song_link = values.link;
         try {
-            addSong({ song_name: song_name, song_tags: song_tags, song_file: song_file });
+            addSong({ song_name: song_name, song_tags: song_tags, song_link: song_link });
             alert("Canción añadida");
         } catch (error) {
             console.error('Error al añadir canción:', error);
@@ -70,6 +56,15 @@ export const NewSong = ({ authState, listOfSongs, listOfTags }) => {
                             <ErrorMessage name='name' component='p' className='text-danger'></ErrorMessage>
                         </div>
                     </div>
+                    <div className="row justify-content-center mx-auto">
+                        <div className='mb-3'>
+                            <label htmlFor='inputAddSongLink' className='form-label'>
+                                Enlace:
+                            </label>
+                            <Field id='inputAddSongLink' name='link' className='form-control col-8' />
+                            <ErrorMessage name='link' component='p' className='text-danger'></ErrorMessage>
+                        </div>
+                    </div>
                     <div className='row justify-content-center mx-auto'>
                         <div className='mb-3'>
                             <label className='form-label d-flex justify-content-center'>Etiquetas:</label>
@@ -82,6 +77,14 @@ export const NewSong = ({ authState, listOfSongs, listOfTags }) => {
                                     <div className='form-check form-check-inline'>
                                         <Field type='checkbox' name='tags' value={"Piano"} className='form-check-input' />
                                         <label className='form-check-label'>{"Piano"}</label>
+                                    </div>
+                                    <div className='form-check form-check-inline'>
+                                        <Field type='checkbox' name='tags' value={"Guitarra"} className='form-check-input' />
+                                        <label className='form-check-label'>{"Guitarra"}</label>
+                                    </div>
+                                    <div className='form-check form-check-inline'>
+                                        <Field type='checkbox' name='tags' value={"Concierto"} className='form-check-input' />
+                                        <label className='form-check-label'>{"Concierto"}</label>
                                     </div>
                                     <div className='form-check form-check-inline'>
                                         <Field type='checkbox' name='tags' value={"Oído"} className='form-check-input' />
@@ -103,7 +106,7 @@ export const NewSong = ({ authState, listOfSongs, listOfTags }) => {
                             </div>
                             <ErrorMessage name='tags' component='p' className='text-danger'></ErrorMessage>
                         </div>
-                        <div className='row justify-content-center mx-auto'>
+                        {/* <div className='row justify-content-center mx-auto'>
                             <div className='mb-3'>
                                 <label htmlFor='inputAudioFile' className='form-label'>
                                     Archivo de audio:
@@ -115,8 +118,7 @@ export const NewSong = ({ authState, listOfSongs, listOfTags }) => {
                                     onChange={handleChange}
                                     />
                             </div>
-                            {/* <ErrorMessage name='file' component='p' className='text-danger'></ErrorMessage> */}
-                        </div>
+                        </div> */}
                     </div>
                     <div className='row justify-content-center'>
                         <button type='submit' className='btn btn-primary col-6'>
