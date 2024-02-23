@@ -27,7 +27,7 @@ export const useAddSong = () => {
             //     createdAt: serverTimestamp()
             // });
 
-            await setDoc(doc(db, "songsDocs", song_name), {
+            await setDoc(doc(db, "songsDocs", (newSongID + " - " + song_name)), {
                 song_id: newSongID,
                 song_name: song_name,
                 song_tags: song_tags,
