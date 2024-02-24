@@ -109,6 +109,12 @@ export const Home = ({ listOfSongs, isLogged, userID, userLikedSongs, setUserLik
                                     <span className='ms-1'>Mashups</span>
                                 </label>
                             </div>
+                            <div>
+                                <label>
+                                    <input type="checkbox" checked={selectedTags['Memes']} onChange={() => toggleTagFilter('Memes')} />
+                                    <span className='ms-1'>Memes</span>
+                                </label>
+                            </div>
                             <br />
                             <label className='mb-2'>Sección:</label>
                             {listOfTags.map((tag, index) => (
@@ -175,6 +181,12 @@ export const Home = ({ listOfSongs, isLogged, userID, userLikedSongs, setUserLik
                                     <label>
                                         <input type="checkbox" checked={selectedTags['Mashup']} onChange={() => toggleTagFilter('Mashup')} />
                                         <span className='ms-1'>Mashups</span>
+                                    </label>
+                                </div>
+                                <div>
+                                    <label>
+                                        <input type="checkbox" checked={selectedTags['Memes']} onChange={() => toggleTagFilter('Memes')} />
+                                        <span className='ms-1'>Memes</span>
                                     </label>
                                 </div>
                                 <br />

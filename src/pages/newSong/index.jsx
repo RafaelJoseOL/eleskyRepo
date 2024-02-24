@@ -94,6 +94,10 @@ export const NewSong = ({ authState, listOfSongs, listOfTags }) => {
                                         <Field type='checkbox' name='tags' value={"Mashup"} className='form-check-input' />
                                         <label className='form-check-label'>{"Mashup"}</label>
                                     </div>
+                                    <div className='form-check form-check-inline'>
+                                        <Field type='checkbox' name='tags' value={"Memes"} className='form-check-input' />
+                                        <label className='form-check-label'>{"Memes"}</label>
+                                    </div>
                                 </div>
                             </div>
                             <div id='checkbox-group' className='d-flex justify-content-center flex-wrap mt-3'>
