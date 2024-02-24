@@ -167,6 +167,12 @@ export const Home = ({ listOfSongs, isLogged, userID, userLikedSongs, setUserLik
                                 </div>
                                 <div>
                                     <label>
+                                        <input type="checkbox" checked={selectedTags['Oído']} onChange={() => toggleTagFilter('Oído')} />
+                                        <span className='ms-1'>Oído</span>
+                                    </label>
+                                </div>
+                                <div>
+                                    <label>
                                         <input type="checkbox" checked={selectedTags['Mashup']} onChange={() => toggleTagFilter('Mashup')} />
                                         <span className='ms-1'>Mashups</span>
                                     </label>
