@@ -46,6 +46,7 @@ export const Playlist = ({ listOfSongs, isLogged, userLikedSongs, volumen, listO
             <SongCardPlaylist
               songs={randomizedSongs}
               volumen={volumen}
+              useEff={useEff}
             />
           </div>
         )}

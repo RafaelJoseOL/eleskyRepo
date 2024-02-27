@@ -5,12 +5,16 @@ import { storage } from "../config/firebase-config";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlay, faPause, faForward, faBackward, faDownload } from '@fortawesome/free-solid-svg-icons'
 
-export const SongCardPlaylist = ({ songs, volumen }) => {
+export const SongCardPlaylist = ({ songs, volumen, useEff }) => {
     const audioRef = useRef();
     const [isPlaying, setIsPlaying] = useState(false);
     const [currentTime, setCurrentTime] = useState('00:00');
     const [duration, setDuration] = useState('00:00');
     const [currSong, setCurrSong] = useState(0);
+
+    useEffect(() => {
+        handlePlayPause(false);
+    }, [useEff]);
 
     useEffect(() => {
         const changeVolumen = async () => {
@@ -136,7 +140,12 @@ export const SongCardPlaylist = ({ songs, volumen }) => {
             <div className='mt-4 card'>
                 {songs.map((song, index) => (
                     <div key={song.song_id}>
-                        <span className='playlistElement' onClick={() => handleChangeSong(index)}>{index + 1} - {song.song_name}</span>
+                        <span
+                            className={`playlistElement ${currSong === index ? 'text-dark' : ''}`}
+                            onClick={() => handleChangeSong(index)}
+                        >
+                            {index + 1} - {currSong === index ? <strong>{song.song_name}</strong> : song.song_name}
+                        </span>
                     </div>
                 ))}
             </div>

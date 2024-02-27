@@ -18,7 +18,26 @@ export const Home = ({
     const [selectedTags, setSelectedTags] = useState({});
     const [currSong, setCurrSong] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
-    const songsPerPage = 12;
+    const [songsPerPage, setSongsPerPage] = useState(12);
+
+    const changePage = (index) => {
+        setCurrentPage(index + 1);
+    };
+
+    useEffect(() => {
+        changeSongsPerPage(songsPerPage);
+    }, []);
+
+    const changeSongsPerPage = (n) => {
+        if (n < 12) {
+            n = 12;
+        } else if (n > 48) {
+            n = 48;
+        }
+        setSongsPerPage(n);
+        document.getElementById("songsPerPage").value = n;
+        document.getElementById("songsPerPage2").value = n;
+    };
 
     const filteredSongs = listOfSongs.filter((song) => {
         const matchesSearch =
@@ -72,7 +91,6 @@ export const Home = ({
                     const docSnap = await getDoc(docRef);
                     if (docSnap.exists()) {
                         const userData = docSnap.data();
-                        console.log(userData);
                         setUserLikedSongs(userData.user_likedSongs || []);
                     }
                 } catch (error) {
@@ -165,6 +183,24 @@ export const Home = ({
                     </div>
                 </div>
                 <div className='col-9 songs mt-4 mx-auto'>
+                    <nav>
+                        <div className='col-12 col-lg-4 mx-auto mb-3 d-flex flex-column align-items-center'>
+                            <label className='navbar-brand ms-4'>Canciones por página: </label>
+                            <input id="songsPerPage" type='number' className='col-3 col-md-2 text-center' onBlur={(event) => changeSongsPerPage(event.target.value)}></input>
+                        </div>
+                        <ul className='pagination justify-content-center'>
+                            {Array.from({ length: Math.ceil(filteredSongs.length / songsPerPage) }).map((_, index) => (
+                                <li key={index} className={`page-item ${currentPage === index + 1 ? 'active' : ''}`}>
+                                    <button
+                                        className='page-link'
+                                        onClick={() => changePage(index)}
+                                    >
+                                        {index + 1}
+                                    </button>
+                                </li>
+                            ))}
+                        </ul>
+                    </nav>
                     <div className='row'>
                         {currentSongs.map((song, index) => (
                             <div
@@ -181,6 +217,7 @@ export const Home = ({
                                     search={search}
                                     selectedTags={selectedTags}
                                     volumen={volumen}
+                                    currentPage={currentPage}
                                 />
                             </div>
                         ))}
@@ -191,12 +228,16 @@ export const Home = ({
                         )}
                     </div>
                     <nav>
+                        <div className='col-12 col-lg-4 mx-auto mb-3 d-flex flex-column align-items-center'>
+                            <label className='navbar-brand'>Canciones por página: </label>
+                            <input id="songsPerPage2" type='number' className='col-3 col-md-2 text-center' onBlur={(event) => changeSongsPerPage(event.target.value)}></input>
+                        </div>
                         <ul className='pagination justify-content-center'>
                             {Array.from({ length: Math.ceil(filteredSongs.length / songsPerPage) }).map((_, index) => (
                                 <li key={index} className={`page-item ${currentPage === index + 1 ? 'active' : ''}`}>
                                     <button
                                         className='page-link'
-                                        onClick={() => setCurrentPage(index + 1)}
+                                        onClick={() => changePage(index)}
                                     >
                                         {index + 1}
                                     </button>

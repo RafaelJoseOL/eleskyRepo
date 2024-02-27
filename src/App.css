@@ -180,6 +180,10 @@ footer {
   padding: 30px;
 }
 
+.cardPlaying {
+  --bg-color: #166292;
+}
+
 .card__menu {
   cursor: pointer;
 }
