@@ -5,7 +5,7 @@ import { db, storage } from "../config/firebase-config"
 export const useAddSong = () => {
     const songsCollection = collection(db, "songsDocs");
 
-    const addSong = async ({ song_name, song_tags, song_file, song_link }) => {
+    const addSong = async ({ song_name, song_origin, song_link, song_tags, song_file }) => {
         try {
             // const storageRef = ref(storage, `songs/${song_name}.mp3`);
             // await uploadBytes(storageRef, song_file);
@@ -27,11 +27,12 @@ export const useAddSong = () => {
             //     createdAt: serverTimestamp()
             // });
 
-            await setDoc(doc(db, "songsDocs", (newSongID + " - " + song_name)), {
+            await setDoc(doc(db, "songsDocs", song_name), {
                 song_id: newSongID,
                 song_name: song_name,
-                song_tags: song_tags,
+                song_origin: song_origin,
                 song_file: newLink,
+                song_tags: song_tags,
                 createdAt: serverTimestamp()
             });
 

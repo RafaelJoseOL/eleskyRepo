@@ -4,6 +4,7 @@ import { ref, getDownloadURL } from 'firebase/storage';
 import { storage } from "../config/firebase-config";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlay, faPause, faHeart, faHeartBroken, faDownload } from '@fortawesome/free-solid-svg-icons'
+import { faHeart as faHeartRegular } from '@fortawesome/free-regular-svg-icons';
 
 export const SongCard = ({ song, currSong, setCurrSong, isLogged, liked, handleLikedSong, search, selectedTags, volumen }) => {
     const audioRef = useRef();
@@ -68,7 +69,8 @@ export const SongCard = ({ song, currSong, setCurrSong, isLogged, liked, handleL
     return (
         <div className="card">
             <div className="card__title">{song.song_name}</div>
-            <div className="card__subtitle">{song.song_tags.join(', ')}</div>
+            <div className="card__subtitle">{song.song_origin}</div>
+            <div className="card__tags">{song.song_tags.join(', ')}</div>
             <div className="card__wrapper">
                 <div className="card__time card__time-passed">{currentTime}</div>
                 <div className="card__timeline progress-bar" onClick={handleProgressClick}>
@@ -83,8 +85,8 @@ export const SongCard = ({ song, currSong, setCurrSong, isLogged, liked, handleL
                 {isLogged && (
                     <div>
                         <button className='playlistButton rounded-circle' id="like-song" onClick={() => handleLikedSong(song.song_id)}>
-                            {liked ? (
-                                <FontAwesomeIcon icon={faHeartBroken} />
+                            {!liked ? (
+                                <FontAwesomeIcon icon={faHeartRegular} />
                             ) : (
                                 <FontAwesomeIcon icon={faHeart} />
                             )}

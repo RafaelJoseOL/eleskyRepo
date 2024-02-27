@@ -1,10 +1,11 @@
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
-import { Home } from "./pages/frontPage/index";
-import { NewSong } from "./pages/newSong/index";
-import { Playlist } from "./pages/playlist/index";
-import { Error404 } from "./pages/error/Error404";
+import { Home } from "./pages/frontPage/home";
+import { NewSong } from "./pages/newSong/newSong";
+import { Playlist } from "./pages/playlist/playlist";
+import { Album } from "./pages/album/album";
+import { Error404 } from "./pages/error/error404";
 import { BrowserRouter as Router, Route, Routes, Link, Navigate } from 'react-router-dom';
 import { SocialIcon } from 'react-social-icons'
 import { useState, useEffect } from 'react';
@@ -21,7 +22,8 @@ import { Test } from "./pages/test";
 
 function App() {
   const [listOfSongs, setListOfSongs] = useState([]);
-  const [listOfTags, setListOfTags] = useState([]);
+  const listOfTags = ["Películas", "Videojuegos", "Series", "Series animadas"];
+  const defaultTags = ["Voz", "Piano", "Oído", "Concierto", "Guitarra", "Mashup", "Memes"];
   const [isLogged, setIsLogged] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [userLikedSongs, setUserLikedSongs] = useState([]);
@@ -40,6 +42,7 @@ function App() {
           return {
             song_id: doc.data().song_id,
             song_name: doc.data().song_name,
+            song_origin: doc.data().song_origin,
             song_tags: doc.data().song_tags,
             song_file: doc.data().song_file
           };
@@ -51,24 +54,6 @@ function App() {
       setLoading(false);
     };
     fetchSongs();
-  }, []);
-
-  useEffect(() => {
-    const fetchTags = async () => {
-      try {
-        const docRef = doc(db, "tags", "50tMAIpnUZiPQMXirgHN");
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          const tagsData = docSnap.data().tag_names.sort((a, b) => a.localeCompare(b));
-          setListOfTags(tagsData);
-        } else {
-          console.log("No se encontró el documento");
-        }
-      } catch (error) {
-        console.error('Error al obtener las etiquetas:', error);
-      }
-    };
-    fetchTags();
   }, []);
 
   useEffect(() => {
@@ -161,13 +146,18 @@ function App() {
                 <span className="navbar-toggler-icon"></span>
               </button>
               <div className="collapse navbar-collapse navbar-custom" id="navbarSupportedContent">
-                <div className='row'>
-                  <div className='col-12 col-lg-4'>
-                    <Link to="/Playlist" className="navbar-brand ms-4">Playlist</Link>
+                <div className='row ms-3'>
+                  <div className='col-12 col-lg-3'>
+                    <Link to="/Playlist" className="navbar-brand col-4">Playlist</Link>
                   </div>
                   {isAdmin && (
-                    <div className='col-12 col-lg-4'>
-                      <Link to="/NewSong" className="navbar-brand ms-4">Añadir canción</Link>
+                  <div className='col-12 col-lg-3'>
+                    <Link to="/Album" className="navbar-brand col-4">Album</Link>
+                  </div>
+                  )}
+                  {isAdmin && (
+                    <div className='col-12 col-lg-3'>
+                      <Link to="/NewSong" className="navbar-brand">Añadir canción</Link>
                     </div>
                   )}
                 </div>
@@ -195,11 +185,13 @@ function App() {
           <Routes>
             <Route path="/" exact element={<Home listOfSongs={listOfSongs} isLogged={isLogged} userID={userID}
               userLikedSongs={userLikedSongs} setUserLikedSongs={setUserLikedSongs} volumen={volumen}
-              loading={loading} listOfTags={listOfTags} />} />
-            <Route path="/NewSong" exact element={<NewSong listOfSongs={listOfSongs} listOfTags={listOfTags} />} />
+              loading={loading} listOfTags={listOfTags} defaultTags={defaultTags} />} />
+            <Route path="/NewSong" exact element={<NewSong listOfTags={listOfTags}
+              isAdmin={isAdmin} defaultTags={defaultTags} />} />
             <Route path="/Playlist" exact element={<Playlist listOfSongs={listOfSongs} isLogged={isLogged}
               userLikedSongs={userLikedSongs} setUserLikedSongs={setUserLikedSongs} volumen={volumen}
               listOfTags={listOfTags} />} />
+            <Route path="/Album" exact element={<Album isAdmin={isAdmin} />} />
             <Route path="/Test" exact element={<Test />} />
             <Route path="/*" exact element={<Error404 />} />
           </Routes>

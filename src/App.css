@@ -48,7 +48,6 @@
   pointer-events: none;
 }
 
-
 .mainContainer {
   min-height: 100vh;
   display: flex;
@@ -198,6 +197,14 @@ footer {
   font-size: 16px;
   color: var(--main-color);
   text-align: center;
+  margin-bottom: 10px;
+}
+
+.card__tags {
+  font-weight: 300;
+  font-size: 16px;
+  color: var(--main-color);
+  text-align: center;
 }
 
 .card__wrapper {
@@ -299,4 +306,12 @@ footer {
   z-index: 0;
   color: var(--color4);
   font-weight: bold;
+}
+
+/* Album */
+
+.albumPhoto {
+  /* height: 300px; */
+  z-index: 100;
+  position: relative;
 }

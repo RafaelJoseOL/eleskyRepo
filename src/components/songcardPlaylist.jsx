@@ -75,7 +75,8 @@ export const SongCardPlaylist = ({ songs, volumen }) => {
         <div>
             <div className="card">
                 <div className="card__title">{songs[currSong].song_name}</div>
-                <div className="card__subtitle">{songs[currSong].song_tags.join(', ')}</div>
+                <div className="card__subtitle">{songs[currSong].song_origin}</div>
+                <div className="card__tags">{songs[currSong].song_tags.join(', ')}</div>
                 <div className="card__wrapper">
                     <div className="card__time card__time-passed">{currentTime}</div>
                     <div className="card__timeline progress-bar" onClick={handleProgressClick}>
