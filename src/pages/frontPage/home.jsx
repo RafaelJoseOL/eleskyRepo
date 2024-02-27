@@ -33,10 +33,13 @@ export const Home = ({
         return matchesSearch && matchesTags;
     }).sort((a, b) => a.song_name.localeCompare(b.song_name));
 
-    // Calculate index of the first and last song of the current page
     const indexOfLastSong = currentPage * songsPerPage;
     const indexOfFirstSong = indexOfLastSong - songsPerPage;
     const currentSongs = filteredSongs.slice(indexOfFirstSong, indexOfLastSong);
+
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [search, selectedTags]);
 
     const handleLikedSong = async (songID) => {
         try {
