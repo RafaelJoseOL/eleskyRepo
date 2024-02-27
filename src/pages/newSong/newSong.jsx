@@ -92,7 +92,7 @@ export const NewSong = ({ listOfTags, isAdmin, defaultTags }) => {
                                     </div>
                                 </div>
                                 <div id='checkbox-group' className='d-flex justify-content-center flex-wrap mt-3'>
-                                    {listOfTags.sort((a, b) => a.localeCompare(b)).map((tag, index) => (
+                                    {listOfTags.map((tag, index) => (
                                         <div key={index} className='form-check form-check-inline'>
                                             <Field type='checkbox' name='tags' value={tag} className='form-check-input' />
                                             <label className='form-check-label'>{tag}</label>

@@ -190,7 +190,7 @@ function App() {
               isAdmin={isAdmin} defaultTags={defaultTags} />} />
             <Route path="/Playlist" exact element={<Playlist listOfSongs={listOfSongs} isLogged={isLogged}
               userLikedSongs={userLikedSongs} setUserLikedSongs={setUserLikedSongs} volumen={volumen}
-              listOfTags={listOfTags} />} />
+              listOfTags={listOfTags} defaultTags={defaultTags} />} />
             <Route path="/Album" exact element={<Album isAdmin={isAdmin} />} />
             <Route path="/Test" exact element={<Test />} />
             <Route path="/*" exact element={<Error404 />} />

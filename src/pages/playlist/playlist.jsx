@@ -2,7 +2,7 @@ import React from 'react'
 import { useState, useEffect } from 'react';
 import { SongCardPlaylist } from '../../components/songcardPlaylist'
 
-export const Playlist = ({ listOfSongs, isLogged, userLikedSongs, volumen, listOfTags }) => {
+export const Playlist = ({ listOfSongs, isLogged, userLikedSongs, volumen, listOfTags, defaultTags }) => {
   const [randomizedSongs, setRandomizedSongs] = useState([]);
   const [filteredSongs, setFilteredSongs] = useState([]);
   const [useEff, setUseEff] = useState(false);
@@ -33,9 +33,9 @@ export const Playlist = ({ listOfSongs, isLogged, userLikedSongs, volumen, listO
           <button className='col-4 mt-2 col-xl-2 mx-1 mx-xl-3 buttonPlaylist' onClick={() => randomizeOrder("liked")}>Favoritas</button>
         )}
         <button className='col-4 mt-2 col-xl-2 mx-1 mx-xl-3 buttonPlaylist' onClick={() => randomizeOrder("todo")}>Todas</button>
-        <button className='col-4 mt-2 col-xl-2 mx-1 mx-xl-3 buttonPlaylist' onClick={() => randomizeOrder("Piano")}>Piano</button>
-        <button className='col-4 mt-2 col-xl-2 mx-1 mx-xl-3 buttonPlaylist' onClick={() => randomizeOrder("Voz")}>Voz</button>
-        <button className='col-4 mt-2 col-xl-2 mx-1 mx-xl-3 buttonPlaylist' onClick={() => randomizeOrder("Concierto")}>Concierto</button>
+        {defaultTags.map((tag, index) => (
+          <button key={index} className='col-4 mt-2 col-xl-2 mx-1 mx-xl-3 buttonPlaylist' onClick={() => randomizeOrder(tag)}>{tag}</button>
+        ))}
         {listOfTags.map((tag, index) => (
           <button className='col-4 mt-2 col-xl-2 mx-1 mx-xl-3 buttonPlaylist' onClick={() => randomizeOrder(tag)} key={index}>{tag}</button>
         ))}
