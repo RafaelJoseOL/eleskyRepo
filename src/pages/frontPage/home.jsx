@@ -1,23 +1,42 @@
 import React, { useState, useEffect } from 'react';
-import { SongCard } from '../../components/songcard'
+import { SongCard } from '../../components/songcard';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
-import { db } from "../../config/firebase-config";
+import { db } from '../../config/firebase-config';
 
-export const Home = ({ listOfSongs, isLogged, userID, userLikedSongs, setUserLikedSongs, volumen, loading, listOfTags, defaultTags }) => {
+export const Home = ({
+    listOfSongs,
+    isLogged,
+    userID,
+    userLikedSongs,
+    setUserLikedSongs,
+    volumen,
+    loading,
+    listOfTags,
+    defaultTags,
+}) => {
     const [search, setSearch] = useState('');
     const [selectedTags, setSelectedTags] = useState({});
     const [currSong, setCurrSong] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const songsPerPage = 12;
 
     const filteredSongs = listOfSongs.filter((song) => {
-        const matchesSearch = (
+        const matchesSearch =
             song.song_name.toLowerCase().includes(search.toLowerCase()) ||
-            song.song_origin.toLowerCase().includes(search.toLowerCase())
+            song.song_origin.toLowerCase().includes(search.toLowerCase());
+        const selectedTagKeys = Object.keys(selectedTags).filter(
+            (key) => selectedTags[key]
         );
-        const selectedTagKeys = Object.keys(selectedTags).filter(key => selectedTags[key]);
-        const matchesTags = selectedTagKeys.length === 0 || selectedTagKeys.every(tag => song.song_tags.includes(tag));
+        const matchesTags =
+            selectedTagKeys.length === 0 ||
+            selectedTagKeys.every((tag) => song.song_tags.includes(tag));
         return matchesSearch && matchesTags;
     }).sort((a, b) => a.song_name.localeCompare(b.song_name));
 
+    // Calculate index of the first and last song of the current page
+    const indexOfLastSong = currentPage * songsPerPage;
+    const indexOfFirstSong = indexOfLastSong - songsPerPage;
+    const currentSongs = filteredSongs.slice(indexOfFirstSong, indexOfLastSong);
 
     const handleLikedSong = async (songID) => {
         try {
@@ -46,15 +65,18 @@ export const Home = ({ listOfSongs, isLogged, userID, userLikedSongs, setUserLik
         const fetchUserLikedSongs = async () => {
             if (isLogged) {
                 try {
-                    const docRef = doc(db, "users", userID);
+                    const docRef = doc(db, 'users', userID);
                     const docSnap = await getDoc(docRef);
                     if (docSnap.exists()) {
                         const userData = docSnap.data();
-                        console.log(userData)
+                        console.log(userData);
                         setUserLikedSongs(userData.user_likedSongs || []);
                     }
                 } catch (error) {
-                    console.error('Error al obtener las canciones que le gustan al usuario:', error);
+                    console.error(
+                        'Error al obtener las canciones que le gustan al usuario:',
+                        error
+                    );
                 }
             }
         };
@@ -139,10 +161,13 @@ export const Home = ({ listOfSongs, isLogged, userID, userLikedSongs, setUserLik
                         </div>
                     </div>
                 </div>
-                <div className='col-8 songs mt-4 mx-auto'>
+                <div className='col-9 songs mt-4 mx-auto'>
                     <div className='row'>
-                        {filteredSongs.map((song, index) => (
-                            <div className='song col-10 col-md-8 col-lg-7 col-xl-6 col-xxl-4 mx-auto song mb-4 d-flex flex-column align-items-center justify-content-center' key={index}>
+                        {currentSongs.map((song, index) => (
+                            <div
+                                className='song col-10 col-md-8 col-lg-7 col-xl-6 col-xxl-4 mx-auto song mb-4 d-flex flex-column align-items-center justify-content-center'
+                                key={index}
+                            >
                                 <SongCard
                                     song={song}
                                     currSong={currSong}
@@ -156,12 +181,26 @@ export const Home = ({ listOfSongs, isLogged, userID, userLikedSongs, setUserLik
                                 />
                             </div>
                         ))}
-                        {(filteredSongs.length == 0 && !loading) && (
+                        {(currentSongs.length === 0 && !loading) && (
                             <div className='ms-5 mt-2 fw-bold'>
                                 No hay canciones que coincidan con tu búsqueda.
                             </div>
                         )}
                     </div>
+                    <nav>
+                        <ul className='pagination justify-content-center'>
+                            {Array.from({ length: Math.ceil(filteredSongs.length / songsPerPage) }).map((_, index) => (
+                                <li key={index} className={`page-item ${currentPage === index + 1 ? 'active' : ''}`}>
+                                    <button
+                                        className='page-link'
+                                        onClick={() => setCurrentPage(index + 1)}
+                                    >
+                                        {index + 1}
+                                    </button>
+                                </li>
+                            ))}
+                        </ul>
+                    </nav>
                 </div>
             </div>
         </div>

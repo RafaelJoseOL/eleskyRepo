@@ -29,7 +29,7 @@ export const NewSong = ({ listOfTags, isAdmin, defaultTags }) => {
     //     console.log(song)
     // }
 
-    const onSubmit = async (values, { setSubmitting }) => {
+    const onSubmit = async (values, { setSubmitting, resetForm }) => {
         setSubmitting(true);
         const song_name = values.name;
         const song_origin = values.origin;
@@ -38,9 +38,9 @@ export const NewSong = ({ listOfTags, isAdmin, defaultTags }) => {
         // const song_file = song;
         try {
             addSong({ song_name: song_name, song_origin: song_origin , song_link: song_link, song_tags: song_tags });
-            alert("Canción añadida");
+            resetForm();
         } catch (error) {
-            console.error('Error al añadir canción:', error);
+            alert('Error al añadir canción:', error)
         } finally {
             setSubmitting(false);
         }
