@@ -107,6 +107,7 @@ export const Home = ({
     return (
         <div className='container-fluid mainHome'>
             <div className='row'>
+                {/* Filtros PC */}
                 <div className='d-none d-md-block col-10 col-md-2 sideBar text-light ms-4 mt-3'>
                     <div className='searchBar mt-3 mx-auto'>
                         <input
@@ -117,30 +118,29 @@ export const Home = ({
                             onChange={(e) => setSearch(e.target.value)}
                         />
                     </div>
-                    <div className='mt-2 mx-auto'>
-                        <label>Tipo:</label>
-                        <div className='mt-2'>
+                    <div className='mt-4 mx-auto'>
+                        <div>
                             {defaultTags.map((tag, index) => (
-                                <div key={index}>
-                                    <label key={index}>
+                                <div key={index} className='tagCheckbox'>
+                                    <label>
                                         <input type="checkbox" value={selectedTags[tag]} onChange={() => toggleTagFilter(tag)} />
-                                        <span className='ms-1'>{tag}</span>
+                                        <span>{tag}</span>
                                     </label>
                                 </div>
                             ))}
                             <br />
-                            <label className='mb-2'>Sección:</label>
                             {listOfTags.map((tag, index) => (
-                                <div key={index}>
+                                <div key={index} className='tagCheckbox' >
                                     <label>
-                                        <input type="checkbox" defaultChecked={selectedTags[tag]} onChange={() => toggleTagFilter(tag)} />
-                                        <span className='ms-1'>{(tag)}</span>
+                                        <input type="checkbox" value={selectedTags[tag]} onChange={() => toggleTagFilter(tag)} />
+                                        <span>{(tag)}</span>
                                     </label>
                                 </div>
                             ))}
                         </div>
                     </div>
                 </div>
+                {/* Filtros móvil/tablet */}
                 <div className='d-md-none mt-3'>
                     <p className='col-md-12 text-center'>
                         <button className="filterButton" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
@@ -148,7 +148,7 @@ export const Home = ({
                         </button>
                     </p>
                     <div className="collapse text-align-center" id="collapseFilter">
-                        <div className='searchBar mt-3 mx-auto'>
+                        <div className='searchBar mt-3 d-flex justify-content-center'>
                             <input
                                 type="text"
                                 placeholder="Buscar por nombre"
@@ -157,24 +157,22 @@ export const Home = ({
                                 onChange={(e) => setSearch(e.target.value)}
                             />
                         </div>
-                        <div className='mt-2 mx-auto'>
-                            <label>Tipo:</label>
-                            <div className='mt-2'>
+                        <div className='mt-4 mx-auto'>
+                            <div>
                                 {defaultTags.map((tag, index) => (
-                                    <div key={index}>
+                                    <div key={index} className='tagCheckbox col-9 mx-auto' >
                                         <label key={index}>
                                             <input type="checkbox" value={selectedTags[tag]} onChange={() => toggleTagFilter(tag)} />
-                                            <span className='ms-1'>{tag}</span>
+                                            <span>{tag}</span>
                                         </label>
                                     </div>
                                 ))}
                                 <br />
-                                <label className='mb-2'>Sección:</label>
                                 {listOfTags.map((tag, index) => (
-                                    <div key={index}>
+                                    <div key={index} className='tagCheckbox col-9 mx-auto' >
                                         <label>
-                                            <input type="checkbox" defaultChecked={selectedTags[tag]} onChange={() => toggleTagFilter(tag)} />
-                                            <span className='ms-1'>{(tag)}</span>
+                                            <input type="checkbox" value={selectedTags[tag]} onChange={() => toggleTagFilter(tag)} />
+                                            <span>{(tag)}</span>
                                         </label>
                                     </div>
                                 ))}
@@ -183,6 +181,7 @@ export const Home = ({
                     </div>
                 </div>
                 <div className='col-9 songs mt-4 mx-auto'>
+                    {/* Paginación superior */}
                     <nav>
                         <div className='col-12 col-lg-4 mx-auto mb-3 d-flex flex-column align-items-center'>
                             <label className='navbar-brand ms-4'>Canciones por página: </label>
@@ -201,6 +200,7 @@ export const Home = ({
                             ))}
                         </ul>
                     </nav>
+                    {/* Canciones */}
                     <div className='row'>
                         {currentSongs.map((song, index) => (
                             <div
@@ -227,6 +227,7 @@ export const Home = ({
                             </div>
                         )}
                     </div>
+                    {/* Paginación inferior */}
                     <nav>
                         <div className='col-12 col-lg-4 mx-auto mb-3 d-flex flex-column align-items-center'>
                             <label className='navbar-brand'>Canciones por página: </label>
@@ -251,7 +252,6 @@ export const Home = ({
     )
 
     function toggleTagFilter(tag) {
-        console.log(tag)
         setSelectedTags(prevTags => ({
             ...prevTags,
             [tag]: !prevTags[tag]
