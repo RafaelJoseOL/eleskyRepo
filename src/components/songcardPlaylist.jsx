@@ -99,32 +99,11 @@ export const SongCardPlaylist = ({ songs, volumen, useEff }) => {
                         <button className='playlistButton rounded-circle' id="play" onClick={() => handlePlayPause(false)}><FontAwesomeIcon icon={faPause} /></button>
                     )}
                     <button className='playlistButton rounded-circle' id="next-song" onClick={() => handleChangeSong(currSong + 1)}><FontAwesomeIcon icon={faForward} /></button>
-                    <button className='playlistButton rounded-circle' id="download-song" onClick={() => {
-                        const a = document.createElement('a');
-                        const songRef = ref(storage, songs[currSong].song_file)
-                        getDownloadURL(songRef)
-                            .then((url) => {
-                                a.href = url;
-                                a.download = `${songs[currSong].song_name}.mp3`;
-                                a.target = "_blank"
-                                a.click();
-                            })
-                            .catch((error) => {
-                                switch (error.code) {
-                                    case 'storage/object-not-found':
-                                        break;
-                                    case 'storage/unauthorized':
-                                        break;
-                                    case 'storage/canceled':
-                                        break;
-                                    case 'storage/unknown':
-                                        break;
-                                    default:
-                                        break;
-                                }
-                            })
-                    }}><FontAwesomeIcon icon={faDownload}
-                        />
+                    <button
+                        className='playlistButton rounded-circle'
+                        id="download-song"
+                        onClick={() => { window.open(songs[currSong].song_file, "_blank") }}>
+                        <FontAwesomeIcon icon={faDownload} />
                     </button>
                     <audio
                         ref={audioRef}
