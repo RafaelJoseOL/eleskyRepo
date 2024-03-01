@@ -19,6 +19,7 @@ export const Home = ({
     const [currSong, setCurrSong] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const [songsPerPage, setSongsPerPage] = useState(12);
+    const [showFavorites, setShowFavorites] = useState(false);
 
     const changePage = (index) => {
         setCurrentPage(index + 1);
@@ -40,16 +41,13 @@ export const Home = ({
     };
 
     const filteredSongs = listOfSongs.filter((song) => {
-        const matchesSearch =
-            song.song_name.toLowerCase().includes(search.toLowerCase()) ||
-            song.song_origin.toLowerCase().includes(search.toLowerCase());
-        const selectedTagKeys = Object.keys(selectedTags).filter(
-            (key) => selectedTags[key]
-        );
-        const matchesTags =
-            selectedTagKeys.length === 0 ||
-            selectedTagKeys.every((tag) => song.song_tags.includes(tag));
-        return matchesSearch && matchesTags;
+        const matchesSearch = song.song_name.toLowerCase().includes(search.toLowerCase())
+            || song.song_origin.toLowerCase().includes(search.toLowerCase());
+        const selectedTagKeys = Object.keys(selectedTags).filter((key) => selectedTags[key]);
+        const matchesTags = selectedTagKeys.length === 0 || selectedTagKeys.every((tag) => song.song_tags.includes(tag));
+        const isFavorite = !showFavorites || userLikedSongs.includes(song.song_id);
+
+        return matchesSearch && matchesTags && isFavorite;
     }).sort((a, b) => a.song_name.localeCompare(b.song_name));
 
     const indexOfLastSong = currentPage * songsPerPage;
@@ -74,35 +72,12 @@ export const Home = ({
                     setUserLikedSongs(updatedLikedSongs);
 
                     await updateDoc(userDocRef, { user_likedSongs: updatedLikedSongs });
-
-                    console.log('Base de datos actualizada correctamente');
                 }
             }
         } catch (error) {
             console.error('Error al actualizar la base de datos:', error);
         }
     };
-
-    useEffect(() => {
-        const fetchUserLikedSongs = async () => {
-            if (isLogged) {
-                try {
-                    const docRef = doc(db, 'users', userID);
-                    const docSnap = await getDoc(docRef);
-                    if (docSnap.exists()) {
-                        const userData = docSnap.data();
-                        setUserLikedSongs(userData.user_likedSongs || []);
-                    }
-                } catch (error) {
-                    console.error(
-                        'Error al obtener las canciones que le gustan al usuario:',
-                        error
-                    );
-                }
-            }
-        };
-        fetchUserLikedSongs();
-    }, [isLogged]);
 
     return (
         <div className='container-fluid mainHome'>
@@ -120,6 +95,12 @@ export const Home = ({
                     </div>
                     <div className='mt-4 mx-auto'>
                         <div>
+                            <div className='tagCheckbox'>
+                                <label>
+                                    <input type="checkbox" value={showFavorites} onChange={() => setShowFavorites(!showFavorites)} />
+                                    <span>Favoritas</span>
+                                </label>
+                            </div>
                             {defaultTags.map((tag, index) => (
                                 <div key={index} className='tagCheckbox'>
                                     <label>

@@ -4,6 +4,7 @@ import 'bootstrap/dist/js/bootstrap.bundle.min';
 import { Home } from "./pages/frontPage/home";
 import { NewSong } from "./pages/newSong/newSong";
 import { Playlist } from "./pages/playlist/playlist";
+import { Videos } from "./pages/videos/videos";
 import { Album } from "./pages/album/album";
 import { Error404 } from "./pages/error/error404";
 import { BrowserRouter as Router, Route, Routes, Link, Navigate } from 'react-router-dom';
@@ -23,7 +24,7 @@ import { Test } from "./pages/test";
 function App() {
   const [listOfSongs, setListOfSongs] = useState([]);
   const listOfTags = ["Animación", "Cantantes", "Películas", "Series", "Videojuegos"];
-  const defaultTags = ["Voz", "Piano", "Oído", "Concierto", "Guitarra", "Mashups", "Memes"];
+  const defaultTags = ["Voz", "Piano", "Oído", "Concierto", "Mashups", "Memes"];
   const [isLogged, setIsLogged] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [userLikedSongs, setUserLikedSongs] = useState([]);
@@ -34,27 +35,65 @@ function App() {
   const { addUser } = useAddUser();
 
   useEffect(() => {
-    const fetchSongs = async () => {
+    const fetchSongsIfNeeded = async () => {
+      setLoading(true);
       try {
-        const q = query(collection(db, "songsDocs"));
-        const querySnapshot = await getDocs(q);
-        const songsData = querySnapshot.docs.map((doc) => {
-          return {
-            song_id: doc.data().song_id,
-            song_name: doc.data().song_name,
-            song_origin: doc.data().song_origin,
-            song_tags: doc.data().song_tags,
-            song_file: doc.data().song_file
-          };
-        });
-        setListOfSongs(songsData);
+        const docRef = doc(db, "metadata", "songs");
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          const currentLastSongID = docSnap.data().lastSongID.toString();
+          const cachedLastSongID = localStorage.getItem("lastSongID");
+
+          if (currentLastSongID !== cachedLastSongID) {
+            const q = query(collection(db, "songsDocs"));
+            const querySnapshot = await getDocs(q);
+            const songsData = querySnapshot.docs.map(doc => ({
+              song_id: doc.data().song_id,
+              song_name: doc.data().song_name,
+              song_origin: doc.data().song_origin,
+              song_tags: doc.data().song_tags,
+              song_file: doc.data().song_file,
+            }));
+
+            setListOfSongs(songsData);
+            localStorage.setItem("songsData", JSON.stringify(songsData));
+            localStorage.setItem("lastSongID", currentLastSongID);
+          } else {
+            const cachedSongsData = JSON.parse(localStorage.getItem("songsData"));
+            if (cachedSongsData) {
+              setListOfSongs(cachedSongsData);
+            }
+          }
+        }
       } catch (error) {
         console.error('Error al obtener las canciones:', error);
       }
       setLoading(false);
     };
-    fetchSongs();
+    fetchSongsIfNeeded();
   }, []);
+
+  useEffect(() => {
+    const fetchUserLikedSongs = async () => {
+      if (isLogged) {
+        try {
+          const docRef = doc(db, 'users', userID);
+          const docSnap = await getDoc(docRef);
+          if (docSnap.exists()) {
+            const userData = docSnap.data();
+            setUserLikedSongs(userData.user_likedSongs || []);
+          }
+        } catch (error) {
+          console.error(
+            'Error al obtener las canciones que le gustan al usuario:',
+            error
+          );
+        }
+      }
+    };
+    fetchUserLikedSongs();
+  }, [isLogged]);
 
   useEffect(() => {
     const auth = getAuth();
@@ -150,11 +189,11 @@ function App() {
                   <div className='col-12 col-lg-3'>
                     <Link to="/Playlist" className="navbar-brand col-4">Playlist</Link>
                   </div>
-                  {isAdmin && (
+                  {/* {isAdmin && (
                   <div className='col-12 col-lg-3'>
                     <Link to="/Album" className="navbar-brand col-4">Album</Link>
                   </div>
-                  )}
+                  )} */}
                   {isAdmin && (
                     <div className='col-12 col-lg-3'>
                       <Link to="/NewSong" className="navbar-brand">Añadir canción</Link>
@@ -191,7 +230,8 @@ function App() {
             <Route path="/Playlist" exact element={<Playlist listOfSongs={listOfSongs} isLogged={isLogged}
               userLikedSongs={userLikedSongs} setUserLikedSongs={setUserLikedSongs} volumen={volumen}
               listOfTags={listOfTags} defaultTags={defaultTags} />} />
-            <Route path="/Album" exact element={<Album isAdmin={isAdmin} />} />
+            {/* <Route path="/Album" exact element={<Album isAdmin={isAdmin} />} />
+            <Route path="/Videos" exact element={<Videos isAdmin={isAdmin} />} /> */}
             <Route path="/Test" exact element={<Test />} />
             <Route path="/*" exact element={<Error404 />} />
           </Routes>
