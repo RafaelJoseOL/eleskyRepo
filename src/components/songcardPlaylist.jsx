@@ -116,7 +116,7 @@ export const SongCardPlaylist = ({ songs, volumen, useEff }) => {
                 </div>
             </div>
 
-            <div className='mt-4 card'>
+            <div className='mt-4 card' style={{ maxHeight: '400px', overflowY: 'auto' }}>
                 {songs.map((song, index) => (
                     <div key={song.song_id}>
                         <span
