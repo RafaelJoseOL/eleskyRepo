@@ -87,7 +87,7 @@ export const Home = ({
                     <div className='searchBar mt-3 mx-auto'>
                         <input
                             type="text"
-                            placeholder="Buscar por nombre"
+                            placeholder=" Buscar por nombre..."
                             value={search}
                             maxLength={20}
                             onChange={(e) => setSearch(e.target.value)}

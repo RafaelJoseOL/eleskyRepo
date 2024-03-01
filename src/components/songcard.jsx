@@ -3,6 +3,7 @@ import { useRef, useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlay, faPause, faHeart, faHeartBroken, faDownload } from '@fortawesome/free-solid-svg-icons'
 import { faHeart as faHeartRegular } from '@fortawesome/free-regular-svg-icons';
+import ReactGA from 'react-ga';
 
 export const SongCard = ({ song, currSong, setCurrSong, isLogged, liked, handleLikedSong, search, selectedTags, volumen, currentPage }) => {
     const audioRef = useRef();
@@ -51,10 +52,22 @@ export const SongCard = ({ song, currSong, setCurrSong, isLogged, liked, handleL
             }
             setCurrSong({ ...song, audioRef });
             setIsPlaying(true);
-            audioRef.current.play();
+            audioRef.current.play();            
+
+            ReactGA.event({
+                category: 'song_play',
+                action: 'Play',
+                label: song.song_name,
+            });
         } else {
             setIsPlaying(false);
             audioRef.current.pause();
+
+            ReactGA.event({
+                category: 'song_play',
+                action: 'Pause',
+                label: song.song_name,
+            });
         }
     };
 

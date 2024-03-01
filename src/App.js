@@ -18,6 +18,7 @@ import {
 } from "firebase/auth";
 import googleIcon from "./images/google.png";
 import { useAddUser } from "./hooks/useAddUser";
+import ReactGA from 'react-ga';
 
 import { Test } from "./pages/test";
 
@@ -33,6 +34,8 @@ function App() {
   const [loading, setLoading] = useState(true);
   const provider = new GoogleAuthProvider();
   const { addUser } = useAddUser();
+
+  ReactGA.initialize('429671910');
 
   useEffect(() => {
     const fetchSongsIfNeeded = async () => {
@@ -190,9 +193,9 @@ function App() {
                     <Link to="/Playlist" className="navbar-brand col-4">Playlist</Link>
                   </div>
                   {/* {isAdmin && (
-                  <div className='col-12 col-lg-3'>
-                    <Link to="/Album" className="navbar-brand col-4">Album</Link>
-                  </div>
+                    <div className='col-12 col-lg-3'>
+                      <Link to="/Album" className="navbar-brand col-4">Album</Link>
+                    </div>
                   )} */}
                   {isAdmin && (
                     <div className='col-12 col-lg-3'>
