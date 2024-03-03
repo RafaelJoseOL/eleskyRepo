@@ -57,6 +57,7 @@ function App() {
               song_origin: doc.data().song_origin,
               song_tags: doc.data().song_tags,
               song_file: doc.data().song_file,
+              song_date: doc.data().createdAt
             }));
 
             setListOfSongs(songsData);
@@ -66,6 +67,7 @@ function App() {
             const cachedSongsData = JSON.parse(localStorage.getItem("songsData"));
             if (cachedSongsData) {
               setListOfSongs(cachedSongsData);
+              console.log(cachedSongsData);
             }
           }
         }

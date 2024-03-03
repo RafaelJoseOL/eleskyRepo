@@ -20,6 +20,7 @@ export const Home = ({
     const [currentPage, setCurrentPage] = useState(1);
     const [songsPerPage, setSongsPerPage] = useState(12);
     const [showFavorites, setShowFavorites] = useState(false);
+    const [sortOrder, setSortOrder] = useState('nombre');
 
     const changePage = (index) => {
         setCurrentPage(index + 1);
@@ -48,7 +49,19 @@ export const Home = ({
         const isFavorite = !showFavorites || userLikedSongs.includes(song.song_id);
 
         return matchesSearch && matchesTags && isFavorite;
-    }).sort((a, b) => a.song_name.localeCompare(b.song_name));
+    }).sort((a, b) => {
+        if (sortOrder === 'fecha') {
+            const dateA = new Date(a.song_date.seconds * 1000);
+            const dateB = new Date(b.song_date.seconds * 1000);
+            return dateB - dateA;
+        } else if (sortOrder === 'fechaInv') {
+            const dateA = new Date(a.song_date.seconds * 1000);
+            const dateB = new Date(b.song_date.seconds * 1000);
+            return dateA - dateB;
+        } else {
+            return a.song_name.localeCompare(b.song_name);
+        }
+    });
 
     const indexOfLastSong = currentPage * songsPerPage;
     const indexOfFirstSong = indexOfLastSong - songsPerPage;
@@ -84,10 +97,23 @@ export const Home = ({
             <div className='row'>
                 {/* Filtros PC */}
                 <div className='d-none d-md-block col-10 col-md-2 sideBar text-light ms-4 mt-3'>
-                    <div className='searchBar mt-3 mx-auto'>
+                    <div className='sortSelect col-12 col-xl-6'>
+                        <span className='fw-bold'>Ordenar por: </span>
+                        <select
+                            className="form-select"
+                            onChange={(e) => setSortOrder(e.target.value)}
+                            defaultValue="nombre"
+                        >
+                            <option value="nombre">Alfabético</option>
+                            <option value="fecha">Recientes</option>
+                            <option value="fechaInv">Antiguas</option>
+                        </select>
+                    </div>
+                    <div className='searchBar mt-3'>
                         <input
+                            className='col-12 col-xl-6'
                             type="text"
-                            placeholder=" Buscar por nombre..."
+                            placeholder=" Buscar..."
                             value={search}
                             maxLength={20}
                             onChange={(e) => setSearch(e.target.value)}
@@ -129,6 +155,18 @@ export const Home = ({
                         </button>
                     </p>
                     <div className="collapse text-align-center" id="collapseFilter">
+                        <div className='sortSelect col-6 mx-auto'>
+                            <span className='fw-bold'>Ordenar por: </span>
+                            <select
+                                className="form-select d-flex"
+                                onChange={(e) => setSortOrder(e.target.value)}
+                                defaultValue="nombre"
+                            >
+                                <option value="nombre">Alfabético</option>
+                                <option value="fecha">Recientes</option>
+                                <option value="fechaInv">Antiguas</option>
+                            </select>
+                        </div>
                         <div className='searchBar mt-3 d-flex justify-content-center'>
                             <input
                                 type="text"
