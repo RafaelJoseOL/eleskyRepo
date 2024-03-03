@@ -26,21 +26,6 @@ export const Home = ({
         setCurrentPage(index + 1);
     };
 
-    useEffect(() => {
-        changeSongsPerPage(songsPerPage);
-    }, []);
-
-    const changeSongsPerPage = (n) => {
-        if (n < 12) {
-            n = 12;
-        } else if (n > 48) {
-            n = 48;
-        }
-        setSongsPerPage(n);
-        document.getElementById("songsPerPage").value = n;
-        document.getElementById("songsPerPage2").value = n;
-    };
-
     const filteredSongs = listOfSongs.filter((song) => {
         const matchesSearch = song.song_name.toLowerCase().includes(search.toLowerCase())
             || song.song_origin.toLowerCase().includes(search.toLowerCase());
@@ -69,7 +54,7 @@ export const Home = ({
 
     useEffect(() => {
         setCurrentPage(1);
-    }, [search, selectedTags]);
+    }, [search, selectedTags, songsPerPage]);
 
     const handleLikedSong = async (songID) => {
         try {
@@ -202,21 +187,70 @@ export const Home = ({
                 <div className='col-9 songs mt-4 mx-auto'>
                     {/* Paginación superior */}
                     <nav>
-                        <div className='col-12 col-lg-4 mx-auto mb-3 d-flex flex-column align-items-center'>
-                            <label className='navbar-brand ms-4'>Canciones por página: </label>
-                            <input id="songsPerPage" type='number' className='col-3 col-md-2 text-center' onBlur={(event) => changeSongsPerPage(event.target.value)}></input>
+                        {/* <div className='col-12 col-lg-4 mx-auto mb-3 d-flex flex-column text-center'>
+                            <label className='navbar-brand fw-bold mb-2'>Canciones por página: </label>
+                            <div>
+                                <button className={`songsPerPageButton ${songsPerPage === 12 ? 'activeSongsButton' : 'inactiveSongsButton'}`}
+                                    onClick={() => setSongsPerPage(12)}>12</button>
+                                <button className={`songsPerPageButton ${songsPerPage === 24 ? 'activeSongsButton' : 'inactiveSongsButton'}`}
+                                    onClick={() => setSongsPerPage(24)}>24</button>
+                                <button className={`songsPerPageButton ${songsPerPage === 36 ? 'activeSongsButton' : 'inactiveSongsButton'}`}
+                                    onClick={() => setSongsPerPage(36)}>36</button>
+                                <button className={`songsPerPageButton ${songsPerPage === 48 ? 'activeSongsButton' : 'inactiveSongsButton'}`}
+                                    onClick={() => setSongsPerPage(48)}>48</button>
+                            </div>
+                        </div> */}
+                        <div className='col-12 col-lg-4 mx-auto mb-3 d-flex flex-column text-center align-items-center justify-content-center'>
+                            <label className='navbar-brand'>Canciones por página: </label>
+                            <select name="songsPerPageSelect" value={songsPerPage} onChange={(event) => setSongsPerPage(event.target.value)}>
+                                <option value="12">12</option>
+                                <option value="24">24</option>
+                                <option value="36">36</option>
+                                <option value="48">48</option>
+                            </select>
                         </div>
                         <ul className='pagination justify-content-center'>
-                            {Array.from({ length: Math.ceil(filteredSongs.length / songsPerPage) }).map((_, index) => (
-                                <li key={index} className={`page-item ${currentPage === index + 1 ? 'active' : ''}`}>
-                                    <button
-                                        className='page-link'
-                                        onClick={() => changePage(index)}
-                                    >
-                                        {index + 1}
-                                    </button>
-                                </li>
-                            ))}
+                            {Array.from({ length: Math.ceil(filteredSongs.length / songsPerPage) }).map((_, index) => {
+                                const isCurrent = currentPage === index + 1;
+                                const isFirst = index === 0;
+                                const isLast = index === Math.ceil(filteredSongs.length / songsPerPage) - 1;
+                                const showPage = isFirst || isLast || Math.abs(currentPage - (index + 1)) <= 2;
+                                const pageCount = Math.ceil(filteredSongs.length / songsPerPage);
+
+                                if (showPage || (pageCount <= 5 && index < pageCount)) {
+                                    return (
+                                        <li key={index} className={`page-item ${isCurrent ? 'active' : ''}`}>
+                                            <button
+                                                className='page-link'
+                                                onClick={() => changePage(index)}
+                                            >
+                                                {index + 1}
+                                            </button>
+                                        </li>
+                                    );
+                                } else if ((index === 1 && !isFirst) || (index === Math.ceil(filteredSongs.length / songsPerPage) - 2 && !isLast)) {
+                                    return (
+                                        <li key={index} className="page-item">
+                                            <input
+                                                type="number"
+                                                className="page-link fst-italic text-muted"
+                                                style={{ width: "50px", textAlign: "center" }}
+                                                placeholder="..."
+                                                onKeyDown={(e) => {
+                                                    if (e.key === 'Enter') {
+                                                        const pageNumber = parseInt(e.target.value);
+                                                        if (!isNaN(pageNumber) && pageNumber >= 1 && pageNumber <= Math.ceil(filteredSongs.length / songsPerPage)) {
+                                                            changePage(pageNumber - 1);
+                                                        }
+                                                    }
+                                                }}
+                                            />
+                                        </li>
+                                    );
+                                } else {
+                                    return null;
+                                }
+                            })}
                         </ul>
                     </nav>
                     {/* Canciones */}
@@ -248,21 +282,70 @@ export const Home = ({
                     </div>
                     {/* Paginación inferior */}
                     <nav>
-                        <div className='col-12 col-lg-4 mx-auto mb-3 d-flex flex-column align-items-center'>
+                        {/* <div className='col-12 col-lg-4 mx-auto mb-3 d-flex flex-column text-center'>
+                            <label className='navbar-brand fw-bold mb-2'>Canciones por página: </label>
+                            <div>
+                                <button className={`songsPerPageButton ${songsPerPage === 12 ? 'activeSongsButton' : 'inactiveSongsButton'}`}
+                                    onClick={() => setSongsPerPage(12)}>12</button>
+                                <button className={`songsPerPageButton ${songsPerPage === 24 ? 'activeSongsButton' : 'inactiveSongsButton'}`}
+                                    onClick={() => setSongsPerPage(24)}>24</button>
+                                <button className={`songsPerPageButton ${songsPerPage === 36 ? 'activeSongsButton' : 'inactiveSongsButton'}`}
+                                    onClick={() => setSongsPerPage(36)}>36</button>
+                                <button className={`songsPerPageButton ${songsPerPage === 48 ? 'activeSongsButton' : 'inactiveSongsButton'}`}
+                                    onClick={() => setSongsPerPage(48)}>48</button>
+                            </div>
+                        </div> */}
+                        <div className='col-12 col-lg-4 mx-auto mb-3 d-flex flex-column text-center align-items-center justify-content-center'>
                             <label className='navbar-brand'>Canciones por página: </label>
-                            <input id="songsPerPage2" type='number' className='col-3 col-md-2 text-center' onBlur={(event) => changeSongsPerPage(event.target.value)}></input>
+                            <select name="songsPerPageSelect" value={songsPerPage} onChange={(event) => setSongsPerPage(event.target.value)}>
+                                <option value="12">12</option>
+                                <option value="24">24</option>
+                                <option value="36">36</option>
+                                <option value="48">48</option>
+                            </select>
                         </div>
                         <ul className='pagination justify-content-center'>
-                            {Array.from({ length: Math.ceil(filteredSongs.length / songsPerPage) }).map((_, index) => (
-                                <li key={index} className={`page-item ${currentPage === index + 1 ? 'active' : ''}`}>
-                                    <button
-                                        className='page-link'
-                                        onClick={() => changePage(index)}
-                                    >
-                                        {index + 1}
-                                    </button>
-                                </li>
-                            ))}
+                            {Array.from({ length: Math.ceil(filteredSongs.length / songsPerPage) }).map((_, index) => {
+                                const isCurrent = currentPage === index + 1;
+                                const isFirst = index === 0;
+                                const isLast = index === Math.ceil(filteredSongs.length / songsPerPage) - 1;
+                                const showPage = isFirst || isLast || Math.abs(currentPage - (index + 1)) <= 2;
+                                const pageCount = Math.ceil(filteredSongs.length / songsPerPage);
+
+                                if (showPage || (pageCount <= 5 && index < pageCount)) {
+                                    return (
+                                        <li key={index} className={`page-item ${isCurrent ? 'active' : ''}`}>
+                                            <button
+                                                className='page-link'
+                                                onClick={() => changePage(index)}
+                                            >
+                                                {index + 1}
+                                            </button>
+                                        </li>
+                                    );
+                                } else if ((index === 1 && !isFirst) || (index === Math.ceil(filteredSongs.length / songsPerPage) - 2 && !isLast)) {
+                                    return (
+                                        <li key={index} className="page-item">
+                                            <input
+                                                type="number"
+                                                className="page-link fst-italic text-muted"
+                                                style={{ width: "50px", textAlign: "center" }}
+                                                placeholder="..."
+                                                onKeyDown={(e) => {
+                                                    if (e.key === 'Enter') {
+                                                        const pageNumber = parseInt(e.target.value);
+                                                        if (!isNaN(pageNumber) && pageNumber >= 1 && pageNumber <= Math.ceil(filteredSongs.length / songsPerPage)) {
+                                                            changePage(pageNumber - 1);
+                                                        }
+                                                    }
+                                                }}
+                                            />
+                                        </li>
+                                    );
+                                } else {
+                                    return null;
+                                }
+                            })}
                         </ul>
                     </nav>
                 </div>
