@@ -54,7 +54,7 @@ export const Home = ({
 
     useEffect(() => {
         setCurrentPage(1);
-    }, [search, selectedTags, songsPerPage]);
+    }, [search, selectedTags, songsPerPage, sortOrder]);
 
     const handleLikedSong = async (songID) => {
         try {

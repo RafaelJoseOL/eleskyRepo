@@ -24,8 +24,8 @@ import { Test } from "./pages/test";
 
 function App() {
   const [listOfSongs, setListOfSongs] = useState([]);
-  const listOfTags = ["Animación", "Cantantes", "Películas", "Series", "Videojuegos"];
   const defaultTags = ["Voz", "Piano", "Oído", "Concierto", "Mashups", "Memes"];
+  const listOfTags = ["Animación", "Cantantes", "Clásica", "Películas", "Series", "Videojuegos"];
   const [isLogged, setIsLogged] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [userLikedSongs, setUserLikedSongs] = useState([]);
