@@ -36,7 +36,6 @@ function App() {
   const { addUser } = useAddUser();
 
   ReactGA.initialize('G-41YPSX64DJ');
-  ReactGA.pageview(window.location.pathname + window.location.search);
 
   useEffect(() => {
     const fetchSongsIfNeeded = async () => {
@@ -65,10 +64,10 @@ function App() {
             localStorage.setItem("songsData", JSON.stringify(songsData));
             localStorage.setItem("lastSongID", currentLastSongID);
           } else {
+            ReactGA.event({"category":"test_GA", "action":"fetchCacheSongs", "label": "true"})
             const cachedSongsData = JSON.parse(localStorage.getItem("songsData"));
             if (cachedSongsData) {
               setListOfSongs(cachedSongsData);
-              console.log(cachedSongsData);
             }
           }
         }
