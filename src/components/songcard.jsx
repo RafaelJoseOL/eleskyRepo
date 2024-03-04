@@ -48,25 +48,23 @@ export const SongCard = ({ song, currSong, setCurrSong, isLogged, liked, handleL
     const handlePlayPause = (play) => {
         if (play) {
             if (currSong != null && audioRef != currSong.audioRef) {
-                currSong.audioRef.current.pause()
+                currSong.audioRef.current.pause();
             }
             setCurrSong({ ...song, audioRef });
             setIsPlaying(true);
-            audioRef.current.play();            
-
+            audioRef.current.play();
             ReactGA.event({
-                category: 'song_play',
-                action: 'Play',
-                label: song.song_name,
+                category: 'Audio',
+                action: 'Play Song',
+                label: song.song_name
             });
         } else {
             setIsPlaying(false);
             audioRef.current.pause();
-
             ReactGA.event({
-                category: 'song_play',
-                action: 'Pause',
-                label: song.song_name,
+                category: 'Audio',
+                action: 'Pause Song',
+                label: song.song_name
             });
         }
     };

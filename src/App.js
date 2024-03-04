@@ -9,7 +9,7 @@ import { Album } from "./pages/album/album";
 import { Error404 } from "./pages/error/error404";
 import { BrowserRouter as Router, Route, Routes, Link, Navigate } from 'react-router-dom';
 import { SocialIcon } from 'react-social-icons'
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { collection, getDocs, query, where, doc, getDoc } from 'firebase/firestore';
 import { db } from "./config/firebase-config";
 import {
@@ -35,7 +35,7 @@ function App() {
   const provider = new GoogleAuthProvider();
   const { addUser } = useAddUser();
 
-  ReactGA.initialize('429671910');
+  ReactGA.initialize('G-41YPSX64DJ');
 
   useEffect(() => {
     const fetchSongsIfNeeded = async () => {
