@@ -36,6 +36,7 @@ function App() {
   const { addUser } = useAddUser();
 
   ReactGA.initialize('G-41YPSX64DJ');
+  ReactGA.pageview(window.location.pathname + window.location.search);
 
   useEffect(() => {
     const fetchSongsIfNeeded = async () => {
