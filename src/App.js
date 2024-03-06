@@ -60,11 +60,17 @@ function App() {
               song_date: doc.data().createdAt
             }));
 
+            // const songsData2 = querySnapshot.docs.map(doc => ({
+            //   song_id: doc.data().song_id,
+            //   song_name: doc.data().song_name,
+            //   song_origin: doc.data().song_origin,
+            // }));
+            // localStorage.setItem("songTemp", JSON.stringify(songsData2));
+
             setListOfSongs(songsData);
             localStorage.setItem("songsData", JSON.stringify(songsData));
             localStorage.setItem("lastSongID", currentLastSongID);
           } else {
-            ReactGA.event({"category":"test_GA", "action":"fetchCacheSongs", "label": "true"})
             const cachedSongsData = JSON.parse(localStorage.getItem("songsData"));
             if (cachedSongsData) {
               setListOfSongs(cachedSongsData);
