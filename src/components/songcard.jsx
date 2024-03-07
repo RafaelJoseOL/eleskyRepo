@@ -106,6 +106,12 @@ export const SongCard = ({ song, currSong, setCurrSong, isLogged, liked, handleL
                         </button>
                     </div>
                 )}
+                {song.song_lore !== undefined && (
+                    <button className='fw-bolder playlistButton rounded-circle loreButton'>
+                        !
+                        <span class="loreText">{song.song_lore}</span>
+                    </button>
+                )}
                 {!isPlaying ? (
                     <button className='playlistButton rounded-circle' id="play" onClick={() => handlePlayPause(true)}>
                         <FontAwesomeIcon icon={faPlay} />
@@ -122,33 +128,6 @@ export const SongCard = ({ song, currSong, setCurrSong, isLogged, liked, handleL
                     onClick={() => { window.open(song.song_file, "_blank") }}>
                     <FontAwesomeIcon icon={faDownload} />
                 </button>
-                {/* <button className='playlistButton rounded-circle' id="download-song" onClick={() => {
-                    const a = document.createElement('a');
-                    const songRef = ref(storage, song.song_file)
-                    getDownloadURL(songRef)
-                        .then((url) => {
-                            a.href = url;
-                            a.download = `${song.song_name}.mp3`;
-                            a.target = "_blank"
-                            a.click();
-                        })
-                        .catch((error) => {
-                            switch (error.code) {
-                                case 'storage/object-not-found':
-                                    break;
-                                case 'storage/unauthorized':
-                                    break;
-                                case 'storage/canceled':
-                                    break;
-                                case 'storage/unknown':
-                                    break;
-                                default:
-                                    break;
-                            }
-                        })
-                }}><FontAwesomeIcon icon={faDownload}
-                    />
-                </button> */}
                 <audio
                     ref={audioRef}
                     src={song.song_file}

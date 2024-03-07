@@ -24,7 +24,7 @@ import { Test } from "./pages/test";
 
 function App() {
   const [listOfSongs, setListOfSongs] = useState([]);
-  const defaultTags = ["Voz", "Piano", "Oído", "Concierto", "Mashups", "Memes"];
+  const defaultTags = ["Voz", "Piano", "Oído", "Concierto", "Mashups", "Medleys", "Memes"];
   const listOfTags = ["Animación", "Cantantes", "Clásica", "Películas", "Series", "Videojuegos"];
   const [isLogged, setIsLogged] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
@@ -57,6 +57,7 @@ function App() {
               song_origin: doc.data().song_origin,
               song_tags: doc.data().song_tags,
               song_file: doc.data().song_file,
+              song_lore: doc.data().song_lore,
               song_date: doc.data().createdAt
             }));
 

@@ -93,6 +93,12 @@ export const SongCardPlaylist = ({ songs, volumen, useEff }) => {
                 </div>
                 <div className="card__wrapper mx-auto">
                     <button className='playlistButton rounded-circle' id="previous-song" onClick={() => handleChangeSong(currSong - 1)}><FontAwesomeIcon icon={faBackward} /></button>
+                    {/* {songs[currSong].song_lore !== undefined && (
+                        <button className='fw-bolder playlistButton rounded-circle loreButton'>
+                            !
+                            <span class="loreTextPlaylist">{songs[currSong].song_lore}</span>
+                        </button>
+                    )} */}
                     {!isPlaying ? (
                         <button className='playlistButton rounded-circle' id="play" onClick={() => handlePlayPause(true)}><FontAwesomeIcon icon={faPlay} /></button>
                     ) : (

@@ -344,6 +344,38 @@ input::-webkit-inner-spin-button {
   height: 35px;
 }
 
+.loreText {
+  visibility: hidden;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+  position: absolute;
+  z-index: 1;
+  bottom: 30%;
+  left: -0.5%;
+  opacity: 0;
+  transition: opacity 0.3s;
+  width: 300px;
+  color: #fff;
+  background-color: var(--color3);
+}
+
+.loreText::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: var(--color3) transparent transparent transparent;
+}
+
+.loreButton:hover .loreText {
+  visibility: visible;
+  opacity: 1;
+}
+
 ::-webkit-scrollbar {
   width: 15px;
 }
