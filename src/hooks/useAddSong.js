@@ -5,12 +5,8 @@ import { db, storage } from "../config/firebase-config"
 export const useAddSong = () => {
     const songsCollection = collection(db, "songsDocs");
 
-    const addSong = async ({ song_name, song_origin, song_link, song_tags, song_file }) => {
+    const addSong = async ({ song_name, song_origin, song_link, song_tags, song_lore }) => {
         try {
-            // const storageRef = ref(storage, `songs/${song_name}.mp3`);
-            // await uploadBytes(storageRef, song_file);
-            // const downloadURL = await getDownloadURL(storageRef);
-
             var oldLink = song_link;
             var newLink = oldLink.slice(0, -4);
             newLink += "raw=1";
@@ -19,20 +15,13 @@ export const useAddSong = () => {
             const lastSongID = lastSongDoc.exists() ? lastSongDoc.data().lastSongID : -1;
             const newSongID = lastSongID + 1;
 
-            // await addDoc(songsCollection, {
-            //     song_id: newSongID,
-            //     song_name: song_name,
-            //     song_tags: song_tags,
-            //     song_file: downloadURL,
-            //     createdAt: serverTimestamp()
-            // });
-
             await setDoc(doc(db, "songsDocs", song_name), {
                 song_id: newSongID,
                 song_name: song_name,
                 song_origin: song_origin,
                 song_file: newLink,
                 song_tags: song_tags,
+                song_lore: song_lore,
                 createdAt: serverTimestamp()
             });
 

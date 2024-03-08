@@ -106,7 +106,7 @@ export const SongCard = ({ song, currSong, setCurrSong, isLogged, liked, handleL
                         </button>
                     </div>
                 )}
-                {song.song_lore !== undefined && (
+                {(song.song_lore !== undefined && song.song_lore !== '') && (
                     <button className='fw-bolder playlistButton rounded-circle loreButton'>
                         !
                         <span class="loreText">{song.song_lore}</span>
