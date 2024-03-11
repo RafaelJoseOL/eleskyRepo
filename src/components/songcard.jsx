@@ -1,11 +1,12 @@
 import React from 'react'
 import { useRef, useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlay, faPause, faHeart, faHeartBroken, faDownload } from '@fortawesome/free-solid-svg-icons'
+import { faPlay, faPause, faHeart, faPlus, faDownload } from '@fortawesome/free-solid-svg-icons'
 import { faHeart as faHeartRegular } from '@fortawesome/free-regular-svg-icons';
 import ReactGA from 'react-ga';
 
-export const SongCard = ({ song, currSong, setCurrSong, isLogged, liked, handleLikedSong, search, selectedTags, volumen, currentPage }) => {
+export const SongCard = ({ song, currSong, setCurrSong, isLogged, liked, handleLikedSong, 
+    search, selectedTags, volumen, currentPage }) => {
     const audioRef = useRef();
     const [isPlaying, setIsPlaying] = useState(false);
     const [currentTime, setCurrentTime] = useState('00:00');
@@ -95,16 +96,19 @@ export const SongCard = ({ song, currSong, setCurrSong, isLogged, liked, handleL
                 <div className="card__time card__time-left">{duration}</div>
             </div>
             <div className="card__wrapper mx-auto">
+                {/* {isLogged && (
+                    <button className='playlistButton rounded-circle' id="like-song" onClick={() => handleAddToPlaylist(song.song_id)}>
+                        <FontAwesomeIcon icon={faPlus} />
+                    </button>
+                )} */}
                 {isLogged && (
-                    <div>
-                        <button className='playlistButton rounded-circle' id="like-song" onClick={() => handleLikedSong(song.song_id)}>
-                            {!liked ? (
-                                <FontAwesomeIcon icon={faHeartRegular} />
-                            ) : (
-                                <FontAwesomeIcon icon={faHeart} />
-                            )}
-                        </button>
-                    </div>
+                    <button className='playlistButton rounded-circle' id="like-song" onClick={() => handleLikedSong(song.song_id)}>
+                        {!liked ? (
+                            <FontAwesomeIcon icon={faHeartRegular} />
+                        ) : (
+                            <FontAwesomeIcon icon={faHeart} />
+                        )}
+                    </button>
                 )}
                 {(song.song_lore !== undefined && song.song_lore !== '') && (
                     <button className='fw-bolder playlistButton rounded-circle loreButton'>

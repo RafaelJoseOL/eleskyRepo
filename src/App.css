@@ -352,7 +352,7 @@ input::-webkit-inner-spin-button {
   position: absolute;
   z-index: 1;
   bottom: 30%;
-  left: -0.5%;
+  right: 6%;
   opacity: 0;
   transition: opacity 0.3s;
   width: 300px;
@@ -360,7 +360,7 @@ input::-webkit-inner-spin-button {
   background-color: var(--color3);
 }
 
-.loreText::after {
+/* .loreText::after {
   content: "";
   position: absolute;
   top: 100%;
@@ -369,7 +369,7 @@ input::-webkit-inner-spin-button {
   border-width: 5px;
   border-style: solid;
   border-color: var(--color3) transparent transparent transparent;
-}
+} */
 
 .loreButton:hover .loreText {
   visibility: visible;
@@ -392,6 +392,16 @@ input::-webkit-inner-spin-button {
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--color3);
+}
+
+.list-group-item {
+  background-color: var(--color6) !important;
+  cursor: pointer;
+}
+
+.selected-group-item {
+  background-color: var(--color3) !important;
+  color: white !important;
 }
 
 /* Login */

@@ -187,19 +187,6 @@ export const Home = ({
                 <div className='col-9 songs mt-4 mx-auto'>
                     {/* Paginación superior */}
                     <nav>
-                        {/* <div className='col-12 col-lg-4 mx-auto mb-3 d-flex flex-column text-center'>
-                            <label className='navbar-brand fw-bold mb-2'>Canciones por página: </label>
-                            <div>
-                                <button className={`songsPerPageButton ${songsPerPage === 12 ? 'activeSongsButton' : 'inactiveSongsButton'}`}
-                                    onClick={() => setSongsPerPage(12)}>12</button>
-                                <button className={`songsPerPageButton ${songsPerPage === 24 ? 'activeSongsButton' : 'inactiveSongsButton'}`}
-                                    onClick={() => setSongsPerPage(24)}>24</button>
-                                <button className={`songsPerPageButton ${songsPerPage === 36 ? 'activeSongsButton' : 'inactiveSongsButton'}`}
-                                    onClick={() => setSongsPerPage(36)}>36</button>
-                                <button className={`songsPerPageButton ${songsPerPage === 48 ? 'activeSongsButton' : 'inactiveSongsButton'}`}
-                                    onClick={() => setSongsPerPage(48)}>48</button>
-                            </div>
-                        </div> */}
                         <div className='col-12 col-lg-4 mx-auto mb-3 d-flex flex-column text-center align-items-center justify-content-center'>
                             <label className='navbar-brand'>Canciones por página: </label>
                             <select name="songsPerPageSelect" value={songsPerPage} onChange={(event) => setSongsPerPage(event.target.value)}>
@@ -282,19 +269,6 @@ export const Home = ({
                     </div>
                     {/* Paginación inferior */}
                     <nav>
-                        {/* <div className='col-12 col-lg-4 mx-auto mb-3 d-flex flex-column text-center'>
-                            <label className='navbar-brand fw-bold mb-2'>Canciones por página: </label>
-                            <div>
-                                <button className={`songsPerPageButton ${songsPerPage === 12 ? 'activeSongsButton' : 'inactiveSongsButton'}`}
-                                    onClick={() => setSongsPerPage(12)}>12</button>
-                                <button className={`songsPerPageButton ${songsPerPage === 24 ? 'activeSongsButton' : 'inactiveSongsButton'}`}
-                                    onClick={() => setSongsPerPage(24)}>24</button>
-                                <button className={`songsPerPageButton ${songsPerPage === 36 ? 'activeSongsButton' : 'inactiveSongsButton'}`}
-                                    onClick={() => setSongsPerPage(36)}>36</button>
-                                <button className={`songsPerPageButton ${songsPerPage === 48 ? 'activeSongsButton' : 'inactiveSongsButton'}`}
-                                    onClick={() => setSongsPerPage(48)}>48</button>
-                            </div>
-                        </div> */}
                         <div className='col-12 col-lg-4 mx-auto mb-3 d-flex flex-column text-center align-items-center justify-content-center'>
                             <label className='navbar-brand'>Canciones por página: </label>
                             <select name="songsPerPageSelect" value={songsPerPage} onChange={(event) => setSongsPerPage(event.target.value)}>

@@ -4,6 +4,7 @@ import 'bootstrap/dist/js/bootstrap.bundle.min';
 import { Home } from "./pages/frontPage/home";
 import { NewSong } from "./pages/newSong/newSong";
 import { Playlist } from "./pages/playlist/playlist";
+import { MyPlaylists } from "./pages/playlist/myPlaylists";
 import { Videos } from "./pages/videos/videos";
 import { Album } from "./pages/album/album";
 import { Error404 } from "./pages/error/error404";
@@ -20,8 +21,6 @@ import googleIcon from "./images/google.png";
 import { useAddUser } from "./hooks/useAddUser";
 import ReactGA from 'react-ga';
 
-import { Test } from "./pages/test";
-
 function App() {
   const [listOfSongs, setListOfSongs] = useState([]);
   const defaultTags = ["Piano", "Guitarra", "Ukelele", "Voz", "Oído", "Concierto", "Mashups", "Medleys", "Memes"];
@@ -29,9 +28,12 @@ function App() {
   const [isLogged, setIsLogged] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [userLikedSongs, setUserLikedSongs] = useState([]);
+  const [userPlaylists, setUserPlaylists] = useState([]);
+  const [userPlaylistsCount, setUserPlaylistsCount] = useState(0);
   const [userID, setUserID] = useState(0);
   const [volumen, setVolumen] = useState(50);
   const [loading, setLoading] = useState(true);
+  const [refresh, setRefresh] = useState(false);
   const provider = new GoogleAuthProvider();
   const { addUser } = useAddUser();
 
@@ -60,13 +62,6 @@ function App() {
               song_lore: doc.data().song_lore,
               song_date: doc.data().createdAt
             }));
-
-            // const songsData2 = querySnapshot.docs.map(doc => ({
-            //   song_id: doc.data().song_id,
-            //   song_name: doc.data().song_name,
-            //   song_origin: doc.data().song_origin,
-            // }));
-            // localStorage.setItem("songTemp", JSON.stringify(songsData2));
 
             setListOfSongs(songsData);
             localStorage.setItem("songsData", JSON.stringify(songsData));
@@ -98,14 +93,42 @@ function App() {
           }
         } catch (error) {
           console.error(
-            'Error al obtener las canciones que le gustan al usuario:',
-            error
+            'Error al obtener las canciones que le gustan al usuario:', error
           );
         }
+      } else {
+        setUserLikedSongs([]);
       }
     };
     fetchUserLikedSongs();
   }, [isLogged]);
+
+  useEffect(() => {
+    const fetchUserPlaylists = async () => {
+      if (isLogged) {
+        try {
+          const docRef = doc(db, 'usersPlaylists', userID);
+          const docSnap = await getDoc(docRef);
+          if (docSnap.exists()) {
+            const userData = docSnap.data();
+            setUserPlaylists(userData || []);
+            setUserPlaylistsCount(Object.keys(userData).length);
+          }
+        } catch (error) {
+          console.error(
+            'Error al obtener las playlists del usuario:', error
+          );
+        }
+      } else {
+        setUserPlaylists([]);
+      }
+    };
+    fetchUserPlaylists();
+  }, [isLogged, refresh]);
+
+  const refreshPlaylists = () => {
+    setRefresh(!refresh);
+  }
 
   useEffect(() => {
     const auth = getAuth();
@@ -186,7 +209,7 @@ function App() {
         <div className='mainContainer'>
           <nav className="navbar navbar-expand-lg navbar-dark navbar-custom">
             <div className="container-fluid">
-              <Link to="/" className="navbar-brand ms-4">Inicio</Link>
+              <Link to="/" className="navbar-brand ms-3">Inicio</Link>
               <button className="navbar-toggler"
                 type="button"
                 data-bs-toggle="collapse"
@@ -197,35 +220,35 @@ function App() {
                 <span className="navbar-toggler-icon"></span>
               </button>
               <div className="collapse navbar-collapse navbar-custom" id="navbarSupportedContent">
-                <div className='row ms-3'>
-                  <div className='col-12 col-lg-3'>
-                    <Link to="/Playlist" className="navbar-brand col-4">Playlist</Link>
+                <div className='row'>
+                  <div className='col-12 col-lg-3 ms-3'>
+                    <Link to="/Playlist" className="navbar-brand">Playlist</Link>
                   </div>
-                  {/* {isAdmin && (
-                    <div className='col-12 col-lg-3'>
-                      <Link to="/Album" className="navbar-brand col-4">Album</Link>
+                  {isLogged && (
+                    <div className='col-12 col-lg-3 ms-3'>
+                      <Link to="/MyPlaylists" className="navbar-brand">Mis Playlists</Link>
                     </div>
-                  )} */}
+                  )}
                   {isAdmin && (
-                    <div className='col-12 col-lg-3'>
+                    <div className='col-12 col-lg-2 ms-3'>
                       <Link to="/NewSong" className="navbar-brand">Añadir canción</Link>
                     </div>
                   )}
                 </div>
-                <div className='col-12 col-lg-4'>
-                  <label className='navbar-brand ms-4'>Volumen global: </label>
+                <div className='mx-lg-auto'>
+                  <label className='navbar-brand ms-3 ms-lg-0'>Volumen global: </label>
                   <input type="range" min="0" max="100" value={volumen} onChange={handleVolumeChange} className='volumeSlider' />
                 </div>
-                <div className="ms-auto mb-2">
+                <div className="ms-3 ms-lg-auto mb-2">
                   {!isLogged ? (
-                    <button className="navbar-brand ms-4 log-btn" onClick={handleGoogleLogin}>
-                      <img src={googleIcon} className='log-img me-3' />
+                    <button className="navbar-brand log-btn" onClick={handleGoogleLogin}>
                       <span>Login</span>
+                      <img src={googleIcon} className='log-img ms-3' />
                     </button>
                   ) : (
-                    <button className="navbar-brand ms-4 log-btn" onClick={handleGoogleLogout}>
-                      <img src={googleIcon} className='log-img me-3' />
+                    <button className="navbar-brand log-btn" onClick={handleGoogleLogout}>
                       <span>Logout</span>
+                      <img src={googleIcon} className='log-img ms-3' />
                     </button>
                   )}
                 </div>
@@ -241,10 +264,12 @@ function App() {
               isAdmin={isAdmin} defaultTags={defaultTags} />} />
             <Route path="/Playlist" exact element={<Playlist listOfSongs={listOfSongs} isLogged={isLogged}
               userLikedSongs={userLikedSongs} setUserLikedSongs={setUserLikedSongs} volumen={volumen}
-              listOfTags={listOfTags} defaultTags={defaultTags} />} />
+              listOfTags={listOfTags} defaultTags={defaultTags} userPlaylists={userPlaylists} />} />
+            <Route path="/MyPlaylists" exact element={<MyPlaylists listOfSongs={listOfSongs} isLogged={isLogged}
+              db={db} userID={userID} userPlaylists={userPlaylists} userPlaylistsCount={userPlaylistsCount} 
+              refreshPlaylists={refreshPlaylists} />} />
             {/* <Route path="/Album" exact element={<Album isAdmin={isAdmin} />} />
             <Route path="/Videos" exact element={<Videos isAdmin={isAdmin} />} /> */}
-            <Route path="/Test" exact element={<Test />} />
             <Route path="/*" exact element={<Error404 />} />
           </Routes>
           <footer className="text-center text-white myFooter">
