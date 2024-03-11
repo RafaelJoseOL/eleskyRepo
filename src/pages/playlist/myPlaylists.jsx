@@ -94,16 +94,19 @@ export const MyPlaylists = ({ listOfSongs, isLogged, db, userID, userPlaylists, 
     const handleDeletePlaylist = async () => {
         try {
             if (isLogged && userID) {
-                const userDocRef = doc(db, 'usersPlaylists', userID);
+                const isConfirmed = window.confirm("¿Estás seguro de que quieres realizar esta acción?");
+                if (isConfirmed) {
+                    const userDocRef = doc(db, 'usersPlaylists', userID);
 
-                await updateDoc(userDocRef, {
-                    [currPlaylistName]: deleteField()
-                });
+                    await updateDoc(userDocRef, {
+                        [currPlaylistName]: deleteField()
+                    });
 
-                alert(`Playlist ${playlistName} borrada con éxito`);
+                    alert(`Playlist ${playlistName} borrada con éxito`);
 
-                finishEditing();
-                refreshPlaylists();
+                    finishEditing();
+                    refreshPlaylists();
+                }
             }
         } catch (error) {
             console.error('Error al actualizar la base de datos:', error);
