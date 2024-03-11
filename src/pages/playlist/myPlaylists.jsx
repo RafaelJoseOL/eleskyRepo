@@ -91,6 +91,25 @@ export const MyPlaylists = ({ listOfSongs, isLogged, db, userID, userPlaylists, 
         }
     };
 
+    const handleDeletePlaylist = async () => {
+        try {
+            if (isLogged && userID) {
+                const userDocRef = doc(db, 'usersPlaylists', userID);
+
+                await updateDoc(userDocRef, {
+                    [currPlaylistName]: deleteField()
+                });
+
+                alert(`Playlist ${playlistName} borrada con éxito`);
+
+                finishEditing();
+                refreshPlaylists();
+            }
+        } catch (error) {
+            console.error('Error al actualizar la base de datos:', error);
+        }
+    };
+
     const finishEditing = () => {
         setSearchInput("");
         setPlaylistName("");
@@ -103,21 +122,21 @@ export const MyPlaylists = ({ listOfSongs, isLogged, db, userID, userPlaylists, 
         <div className='col-12 text-center'>
             {!editing && (
                 <div className='d-flex flex-column mb-4'>
-                {Object.entries(userPlaylists).map(([playlistName, songIds]) => (
-                    <div key={playlistName} className='mt-4 card mx-auto col-9 col-lg-3'>
-                        <h3>{playlistName}</h3>
-                        <div>
-                            {songIds.map((songId, index) => (
-                                <div key={index}>{findSongNameById(songId)}</div>
-                            ))}
+                    {Object.entries(userPlaylists).map(([playlistName, songIds]) => (
+                        <div key={playlistName} className='mt-4 card mx-auto col-9 col-lg-3'>
+                            <h3>{playlistName}</h3>
+                            <div>
+                                {songIds.map((songId, index) => (
+                                    <div key={index}>{findSongNameById(songId)}</div>
+                                ))}
+                            </div>
+                            <button className='col-3 mx-auto mt-3 filterButton'
+                                onClick={() => editPlaylist(playlistName, songIds)}>Editar
+                            </button>
                         </div>
-                        <button className='col-3 mx-auto mt-3 filterButton'
-                            onClick={() => editPlaylist(playlistName, songIds)}>Editar
-                        </button>
-                    </div>
-                ))}
-            </div>
-            )}            
+                    ))}
+                </div>
+            )}
             {editing ? (
                 <div className='row mx-auto mb-5 mt-4' id="addPlaylistForm">
                     <div className='col-10 col-lg-6 mx-auto'>
@@ -141,6 +160,7 @@ export const MyPlaylists = ({ listOfSongs, isLogged, db, userID, userPlaylists, 
                             </div>
                             <div className='d-flex flex-column col-6 mx-auto'>
                                 <button type="button" className="btn btn-primary mt-3 position-relative z-0" onClick={handleUpdatePlaylist}>Finalizar</button>
+                                <button type="button" className="btn btn-primary mt-3 position-relative z-0" onClick={handleDeletePlaylist}>Borrar</button>
                                 <button type="button" className="btn btn-primary mt-3 position-relative z-0" onClick={finishEditing}>Cancelar</button>
                             </div>
                         </form>
