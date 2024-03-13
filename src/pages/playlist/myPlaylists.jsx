@@ -78,7 +78,7 @@ export const MyPlaylists = ({ listOfSongs, isLogged, db, userID, userPlaylists, 
                         [playlistName]: playlistSongs
                     }, { merge: true });
 
-                    alert(`Playlist ${currPlaylistName} actualizada con éxito`);
+                    alert(`Playlist ${playlistName} actualizada con éxito`);
 
                     finishEditing();
                     refreshPlaylists();
@@ -169,7 +169,7 @@ export const MyPlaylists = ({ listOfSongs, isLogged, db, userID, userPlaylists, 
             ) : (
                 <div>
                     {userPlaylistsCount < 5 ? (
-                        <div className='newPlaylistDiv mb-3 mt-4'>
+                        <div className='mt-4'>
                             {!creating && (
                                 <button className="filterButton" type="button" onClick={() => setCreating(true)}>
                                     Crear Playlist

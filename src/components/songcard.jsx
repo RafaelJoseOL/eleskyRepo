@@ -117,12 +117,12 @@ export const SongCard = ({ song, currSong, setCurrSong, isLogged, liked, handleL
                     </button>
                 )}
                 {!isPlaying ? (
-                    <button className='playlistButton rounded-circle' id="play" onClick={() => handlePlayPause(true)}>
+                    <button className='playlistButton rounded-circle' id={`play ${song.song_name}`} onClick={() => handlePlayPause(true)}>
                         <FontAwesomeIcon icon={faPlay} />
                     </button>
                 ) :
                     (
-                        <button className='playlistButton rounded-circle' id="play" onClick={() => handlePlayPause(false)}>
+                        <button className='playlistButton rounded-circle' id={`pause ${song.song_name}`} onClick={() => handlePlayPause(false)}>
                             <FontAwesomeIcon icon={faPause} />
                         </button>
                     )}

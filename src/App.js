@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import { Home } from "./pages/frontPage/home";
 import { NewSong } from "./pages/newSong/newSong";
-import { Playlist } from "./pages/playlist/playlist";
+import { Playlists } from "./pages/playlist/playlists";
 import { MyPlaylists } from "./pages/playlist/myPlaylists";
 import { Videos } from "./pages/videos/videos";
 import { Album } from "./pages/album/album";
@@ -222,7 +222,7 @@ function App() {
               <div className="collapse navbar-collapse navbar-custom" id="navbarSupportedContent">
                 <div className='row'>
                   <div className='col-12 col-lg-3 ms-3'>
-                    <Link to="/Playlist" className="navbar-brand">Playlist</Link>
+                    <Link to="/Playlists" className="navbar-brand">Playlists</Link>
                   </div>
                   {isLogged && (
                     <div className='col-12 col-lg-3 ms-3'>
@@ -262,7 +262,7 @@ function App() {
               loading={loading} listOfTags={listOfTags} defaultTags={defaultTags} />} />
             <Route path="/NewSong" exact element={<NewSong listOfTags={listOfTags}
               isAdmin={isAdmin} defaultTags={defaultTags} />} />
-            <Route path="/Playlist" exact element={<Playlist listOfSongs={listOfSongs} isLogged={isLogged}
+            <Route path="/Playlists" exact element={<Playlists listOfSongs={listOfSongs} isLogged={isLogged}
               userLikedSongs={userLikedSongs} setUserLikedSongs={setUserLikedSongs} volumen={volumen}
               listOfTags={listOfTags} defaultTags={defaultTags} userPlaylists={userPlaylists} />} />
             <Route path="/MyPlaylists" exact element={<MyPlaylists listOfSongs={listOfSongs} isLogged={isLogged}
