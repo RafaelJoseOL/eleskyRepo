@@ -1,5 +1,5 @@
 import React from 'react'
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { doc, setDoc, deleteField, updateDoc } from 'firebase/firestore';
 
 export const MyPlaylists = ({ listOfSongs, isLogged, db, userID, userPlaylists, userPlaylistsCount, refreshPlaylists }) => {
@@ -28,6 +28,8 @@ export const MyPlaylists = ({ listOfSongs, isLogged, db, userID, userPlaylists, 
     const handleAddPlaylist = async () => {
         if (playlistName === "") {
             alert("Introduce un nombre para tu playlist.");
+        } else if (playlistName.length >= 20) {
+            alert("20 caracteres máximo");
         } else {
             try {
                 if (isLogged && userID) {
@@ -64,6 +66,9 @@ export const MyPlaylists = ({ listOfSongs, isLogged, db, userID, userPlaylists, 
     const handleUpdatePlaylist = async () => {
         if (playlistName === "") {
             alert("Introduce un nombre para tu playlist.");
+        }
+        else if (playlistName.length >= 20) {
+            alert("20 caracteres máximo");
         } else {
             try {
                 if (isLogged && userID) {

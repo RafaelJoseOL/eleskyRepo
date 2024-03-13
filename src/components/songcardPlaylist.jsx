@@ -100,11 +100,11 @@ export const SongCardPlaylist = ({ songs, volumen, useEff }) => {
                         </button>
                     )} */}
                     {!isPlaying ? (
-                        <button className='playlistButton rounded-circle' id="play" onClick={() => handlePlayPause(true)}><FontAwesomeIcon icon={faPlay} /></button>
+                        <button className='playlistButton rounded-circle' id={`play ${songs[currSong].song_name}`} onClick={() => handlePlayPause(true)}><FontAwesomeIcon icon={faPlay} /></button>
                     ) : (
-                        <button className='playlistButton rounded-circle' id="play" onClick={() => handlePlayPause(false)}><FontAwesomeIcon icon={faPause} /></button>
+                        <button className='playlistButton rounded-circle' id={`pause ${songs[currSong].song_name}`} onClick={() => handlePlayPause(false)}><FontAwesomeIcon icon={faPause} /></button>
                     )}
-                    <button className='playlistButton rounded-circle' id="next-song" onClick={() => handleChangeSong(currSong + 1)}><FontAwesomeIcon icon={faForward} /></button>
+                    <button className='playlistButton rounded-circle'  id={`skip ${songs[currSong].song_name}`}  onClick={() => handleChangeSong(currSong + 1)}><FontAwesomeIcon icon={faForward} /></button>
                     <button
                         className='playlistButton rounded-circle'
                         id="download-song"

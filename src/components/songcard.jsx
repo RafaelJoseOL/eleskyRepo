@@ -102,7 +102,7 @@ export const SongCard = ({ song, currSong, setCurrSong, isLogged, liked, handleL
                     </button>
                 )} */}
                 {isLogged && (
-                    <button className='playlistButton rounded-circle' id="like-song" onClick={() => handleLikedSong(song.song_id)}>
+                    <button className='playlistButton rounded-circle' id={`${!liked ? "like" : "dislike"} ${song.song_name}`} onClick={() => handleLikedSong(song.song_id)}>
                         {!liked ? (
                             <FontAwesomeIcon icon={faHeartRegular} />
                         ) : (

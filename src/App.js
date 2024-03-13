@@ -8,6 +8,7 @@ import { MyPlaylists } from "./pages/playlist/myPlaylists";
 import { Videos } from "./pages/videos/videos";
 import { Album } from "./pages/album/album";
 import { Error404 } from "./pages/error/error404";
+import { useAddUser } from "./hooks/useAddUser";
 import { BrowserRouter as Router, Route, Routes, Link, Navigate } from 'react-router-dom';
 import { SocialIcon } from 'react-social-icons'
 import React, { useState, useEffect } from 'react';
@@ -18,8 +19,6 @@ import {
   browserLocalPersistence, setPersistence, onAuthStateChanged
 } from "firebase/auth";
 import googleIcon from "./images/google.png";
-import { useAddUser } from "./hooks/useAddUser";
-import ReactGA from 'react-ga';
 
 function App() {
   const [listOfSongs, setListOfSongs] = useState([]);
@@ -36,8 +35,6 @@ function App() {
   const [refresh, setRefresh] = useState(false);
   const provider = new GoogleAuthProvider();
   const { addUser } = useAddUser();
-
-  ReactGA.initialize('G-41YPSX64DJ');
 
   useEffect(() => {
     const fetchSongsIfNeeded = async () => {
@@ -266,7 +263,7 @@ function App() {
               userLikedSongs={userLikedSongs} setUserLikedSongs={setUserLikedSongs} volumen={volumen}
               listOfTags={listOfTags} defaultTags={defaultTags} userPlaylists={userPlaylists} />} />
             <Route path="/MyPlaylists" exact element={<MyPlaylists listOfSongs={listOfSongs} isLogged={isLogged}
-              db={db} userID={userID} userPlaylists={userPlaylists} userPlaylistsCount={userPlaylistsCount} 
+              db={db} userID={userID} userPlaylists={userPlaylists} userPlaylistsCount={userPlaylistsCount}
               refreshPlaylists={refreshPlaylists} />} />
             {/* <Route path="/Album" exact element={<Album isAdmin={isAdmin} />} />
             <Route path="/Videos" exact element={<Videos isAdmin={isAdmin} />} /> */}
