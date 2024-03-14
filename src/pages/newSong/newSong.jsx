@@ -15,7 +15,7 @@ export const NewSong = ({ listOfTags, isAdmin, defaultTags }) => {
     };
 
     const validationSchema = Yup.object().shape({
-        name: Yup.string().min(3).max(50).required('Introduce el nombre de la canción.'),
+        name: Yup.string().min(3).max(33).required('Introduce el nombre de la canción.'),
         origin: Yup.string().min(3).max(50).required('Introduce el origen de la canción.'),
         link: Yup.string().min(3).required('Introduce el enlace del archivo.'),
         tags: Yup.array().min(1, 'Selecciona al menos una etiqueta.').of(Yup.string().required()).required(),
