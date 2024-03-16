@@ -15,8 +15,7 @@ import React, { useState, useEffect } from 'react';
 import { collection, getDocs, query, where, doc, getDoc } from 'firebase/firestore';
 import { db } from "./config/firebase-config";
 import {
-  GoogleAuthProvider, getAuth, signInWithPopup, signOut,
-  browserLocalPersistence, setPersistence, onAuthStateChanged
+  GoogleAuthProvider, getAuth, signInWithPopup, signOut, browserLocalPersistence, setPersistence, onAuthStateChanged
 } from "firebase/auth";
 import googleIcon from "./images/google.png";
 
@@ -156,7 +155,7 @@ function App() {
         setIsAdmin(false);
       }
     } catch (error) {
-      console.error('Error al verificar el estado del administrador:', error);
+      console.error('Error al verificar el estado de admin:', error);
     }
   }
 
