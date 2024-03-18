@@ -81,7 +81,7 @@ export const SongCard = ({ song, currSong, setCurrSong, isLogged, liked, handleL
     };
 
     return (
-        <div className={`${isPlaying ? 'card cardPlaying' : 'card'}`}>
+        <div className={`d-flex flex-column justify-content-center ${isPlaying ? 'card cardPlaying' : 'card'}`}>
             <div className={`card__title`}>{song.song_name}</div>
             <div className="card__subtitle">{song.song_origin}</div>
             <div className="card__tags">{song.song_tags.join(', ')}</div>
