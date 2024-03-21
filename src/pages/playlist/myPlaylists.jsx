@@ -228,16 +228,16 @@ export const MyPlaylists = ({ listOfSongs, isLogged, db, userID, userPlaylists, 
             {!editing && !creating && (
                 <div className='d-flex flex-column mb-4'>
                     {Object.entries(userPlaylists).map(([playlistName, songIds]) => (
-                        <div key={playlistName} className='mt-4 card mx-auto col-9 col-lg-3'>
+                        <div key={playlistName} className='mt-4 card mx-auto col-9 col-lg-3'  style={{ maxHeight: '400px', overflowY: 'auto' }}>
+                            <button className='col-3 mx-auto mb-3 filterButton'
+                                onClick={() => editPlaylist(playlistName, songIds)}>Editar
+                            </button>
                             <h3>{playlistName}</h3>
                             <div>
                                 {songIds.map((songId, index) => (
                                     <div key={index}>{findSongNameById(songId)}</div>
                                 ))}
                             </div>
-                            <button className='col-3 mx-auto mt-3 filterButton'
-                                onClick={() => editPlaylist(playlistName, songIds)}>Editar
-                            </button>
                         </div>
                     ))}
                 </div>
