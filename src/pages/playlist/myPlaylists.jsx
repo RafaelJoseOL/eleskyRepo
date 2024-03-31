@@ -51,7 +51,9 @@ export const MyPlaylists = ({ listOfSongs, isLogged, db, userID, userPlaylists, 
 
     const findSongNameById = (songId) => {
         const song = listOfSongs.find(song => song.song_id === songId);
-        return song.song_name;
+        if(song){
+            return song.song_name;
+        }
     };
 
     const editPlaylist = (playlistName, songIds) => {

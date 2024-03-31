@@ -13,6 +13,7 @@ export const Home = ({
     loading,
     listOfTags,
     defaultTags,
+    analytics
 }) => {
     const [search, setSearch] = useState('');
     const [selectedTags, setSelectedTags] = useState({});
@@ -258,6 +259,7 @@ export const Home = ({
                                     selectedTags={selectedTags}
                                     volumen={volumen}
                                     currentPage={currentPage}
+                                    analytics={analytics}
                                 />
                             </div>
                         ))}
