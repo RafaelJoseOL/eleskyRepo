@@ -13,13 +13,11 @@ import { BrowserRouter as Router, Route, Routes, Link, Navigate } from 'react-ro
 import { SocialIcon } from 'react-social-icons'
 import React, { useState, useEffect } from 'react';
 import { collection, getDocs, query, where, doc, getDoc } from 'firebase/firestore';
-import { db } from "./config/firebase-config";
+import { db, analytics } from "./config/firebase-config";
 import {
   GoogleAuthProvider, getAuth, signInWithPopup, signOut, browserLocalPersistence, setPersistence, onAuthStateChanged
 } from "firebase/auth";
 import googleIcon from "./images/google.png";
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
 
 function App() {
   const [listOfSongs, setListOfSongs] = useState([]);
@@ -36,19 +34,6 @@ function App() {
   const [refresh, setRefresh] = useState(false);
   const provider = new GoogleAuthProvider();
   const { addUser } = useAddUser();
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyBdgPWyZX2FxWWJgNcoIbBqnLRjlpu_OdM",
-    authDomain: "eleskyrepo.firebaseapp.com",
-    projectId: "eleskyrepo",
-    storageBucket: "eleskyrepo.appspot.com",
-    messagingSenderId: "390599492204",
-    appId: "1:390599492204:web:94f0ae4e246bc998f7ce49",
-    measurementId: "G-13WB6CC5DC"
-  };
-  
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
 
   useEffect(() => {
     const fetchSongsIfNeeded = async () => {
