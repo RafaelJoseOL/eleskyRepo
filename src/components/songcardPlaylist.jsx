@@ -6,12 +6,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay, faPause, faForward, faBackward, faDownload } from '@fortawesome/free-solid-svg-icons';
 import { logEvent } from "firebase/analytics";
 
-export const SongCardPlaylist = ({ songs, volumen, useEff, analytics }) => {
+export const SongCardPlaylist = ({ songs, volumen, useEff, analytics, currSong, setCurrSong }) => {
     const audioRef = useRef();
     const [isPlaying, setIsPlaying] = useState(false);
     const [currentTime, setCurrentTime] = useState('00:00');
     const [duration, setDuration] = useState('00:00');
-    const [currSong, setCurrSong] = useState(0);
+
+    useEffect(() => {
+        logEvent(analytics, 'playSong', { name: songs[0].song_name });
+    }, []);
 
     useEffect(() => {
         handlePlayPause(false);
@@ -99,7 +102,7 @@ export const SongCardPlaylist = ({ songs, volumen, useEff, analytics }) => {
                     <div className="card__time card__time-left">{duration}</div>
                 </div>
                 <div className="card__wrapper mx-auto">
-                    <button className='playlistButton rounded-circle' id="previous-song" onClick={() => handleChangeSong(currSong - 1)}><FontAwesomeIcon icon={faBackward} /></button>
+                    <button className='playlistButton rounded-circle' id="previous-song" onClick={() => handleChangeSong(currSong - 1, true)}><FontAwesomeIcon icon={faBackward} /></button>
                     {/* {songs[currSong].song_lore !== undefined && (
                         <button className='fw-bolder playlistButton rounded-circle loreButton'>
                             !

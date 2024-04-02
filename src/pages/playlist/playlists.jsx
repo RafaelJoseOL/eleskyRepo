@@ -8,6 +8,7 @@ export const Playlists = ({ listOfSongs, isLogged, userLikedSongs, volumen, list
   const [filteredSongs, setFilteredSongs] = useState([]);
   const [useEff, setUseEff] = useState(false);
   const [selectedButton, setSelectedButton] = useState(null);
+  const [currSong, setCurrSong] = useState(0);
 
   useEffect(() => {
     const shuffleAndSetRandomizedSongs = () => {
@@ -15,6 +16,7 @@ export const Playlists = ({ listOfSongs, isLogged, userLikedSongs, volumen, list
       setRandomizedSongs(shuffledSongs);
     };
     shuffleAndSetRandomizedSongs();
+    setCurrSong(0);
   }, [useEff]);
 
   const randomizeOrder = (tag) => {
@@ -71,6 +73,8 @@ export const Playlists = ({ listOfSongs, isLogged, userLikedSongs, volumen, list
               volumen={volumen}
               useEff={useEff}
               analytics={analytics}
+              currSong={currSong}
+              setCurrSong={setCurrSong}
             />
           </div>
         )}
