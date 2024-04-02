@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlay, faPause, faHeart, faPlus, faDownload } from '@fortawesome/free-solid-svg-icons'
 import { faHeart as faHeartRegular } from '@fortawesome/free-regular-svg-icons';
 import ReactGA from 'react-ga';
-import { getAnalytics, logEvent } from "firebase/analytics";
+import { logEvent } from "firebase/analytics";
 
 export const SongCard = ({ song, currSong, setCurrSong, isLogged, liked, handleLikedSong, 
     search, selectedTags, volumen, currentPage, analytics }) => {
@@ -55,7 +55,7 @@ export const SongCard = ({ song, currSong, setCurrSong, isLogged, liked, handleL
             setCurrSong({ ...song, audioRef });
             setIsPlaying(true);
             audioRef.current.play();
-            logEvent(analytics, 'songs', { name: 'playSong', value: song.song_name});
+            logEvent(analytics, 'playSong', { name: song.song_name});
         } else {
             setIsPlaying(false);
             audioRef.current.pause();

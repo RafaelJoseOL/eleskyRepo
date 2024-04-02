@@ -2,10 +2,11 @@ import React from 'react'
 import { useRef, useState, useEffect } from 'react';
 import { ref, getDownloadURL } from 'firebase/storage';
 import { storage } from "../config/firebase-config";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlay, faPause, faForward, faBackward, faDownload } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlay, faPause, faForward, faBackward, faDownload } from '@fortawesome/free-solid-svg-icons';
+import { logEvent } from "firebase/analytics";
 
-export const SongCardPlaylist = ({ songs, volumen, useEff }) => {
+export const SongCardPlaylist = ({ songs, volumen, useEff, analytics }) => {
     const audioRef = useRef();
     const [isPlaying, setIsPlaying] = useState(false);
     const [currentTime, setCurrentTime] = useState('00:00');
@@ -23,13 +24,19 @@ export const SongCardPlaylist = ({ songs, volumen, useEff }) => {
         changeVolumen();
     }, [volumen]);
 
-    const changeSong = (next) => {
+    const changeSong = (next, skip) => {
+        if (skip) {
+            logEvent(analytics, 'skipSong', { name: songs[currSong].song_name });
+        }
         if (next >= songs.length) {
             setCurrSong(0);
+            logEvent(analytics, 'playSong', { name: songs[0].song_name });
         } else if (next < 0) {
             setCurrSong(songs.length - 1);
+            logEvent(analytics, 'playSong', { name: songs[songs.length - 1].song_name });
         } else {
             setCurrSong(next);
+            logEvent(analytics, 'playSong', { name: songs[next].song_name });
         }
     }
 
@@ -67,9 +74,9 @@ export const SongCardPlaylist = ({ songs, volumen, useEff }) => {
         }
     };
 
-    const handleChangeSong = (next) => {
+    const handleChangeSong = (next, skip) => {
         handlePlayPause(false);
-        changeSong(next);
+        changeSong(next, skip);
         setTimeout(() => {
             handlePlayPause(true);
         }, 200);
@@ -104,7 +111,7 @@ export const SongCardPlaylist = ({ songs, volumen, useEff }) => {
                     ) : (
                         <button className='playlistButton rounded-circle' id={`pause ${songs[currSong].song_name}`} onClick={() => handlePlayPause(false)}><FontAwesomeIcon icon={faPause} /></button>
                     )}
-                    <button className='playlistButton rounded-circle'  id={`skip ${songs[currSong].song_name}`}  onClick={() => handleChangeSong(currSong + 1)}><FontAwesomeIcon icon={faForward} /></button>
+                    <button className='playlistButton rounded-circle' id={`skip ${songs[currSong].song_name}`} onClick={() => handleChangeSong(currSong + 1, true)}><FontAwesomeIcon icon={faForward} /></button>
                     <button
                         className='playlistButton rounded-circle'
                         id="download-song"
@@ -117,7 +124,7 @@ export const SongCardPlaylist = ({ songs, volumen, useEff }) => {
                         onLoadedMetadata={handleLoadedMetadata}
                         onTimeUpdate={() => setCurrentTimeFormat(audioRef.current.currentTime)}
                         onPause={() => handlePlayPause(false)}
-                        onEnded={() => handleChangeSong(currSong + 1)}
+                        onEnded={() => handleChangeSong(currSong + 1, false)}
                     />
                 </div>
             </div>
@@ -127,7 +134,7 @@ export const SongCardPlaylist = ({ songs, volumen, useEff }) => {
                     <div key={song.song_id}>
                         <span
                             className={`playlistElement ${currSong === index ? 'text-dark' : ''}`}
-                            onClick={() => handleChangeSong(index)}
+                            onClick={() => handleChangeSong(index, true)}
                         >
                             {index + 1} - {currSong === index ? <strong>{song.song_name}</strong> : song.song_name}
                         </span>

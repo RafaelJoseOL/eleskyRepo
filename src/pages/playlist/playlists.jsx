@@ -2,7 +2,8 @@ import React from 'react'
 import { useState, useEffect } from 'react';
 import { SongCardPlaylist } from '../../components/songcardPlaylist'
 
-export const Playlists = ({ listOfSongs, isLogged, userLikedSongs, volumen, listOfTags, defaultTags, userPlaylists }) => {
+export const Playlists = ({ listOfSongs, isLogged, userLikedSongs, volumen, listOfTags, defaultTags, 
+  userPlaylists, analytics }) => {
   const [randomizedSongs, setRandomizedSongs] = useState([]);
   const [filteredSongs, setFilteredSongs] = useState([]);
   const [useEff, setUseEff] = useState(false);
@@ -34,7 +35,7 @@ export const Playlists = ({ listOfSongs, isLogged, userLikedSongs, volumen, list
     setFilteredSongs(filteredSongs);
     setUseEff(!useEff);
     setSelectedButton(playlistName);
-  };  
+  };
 
   return (
     <div className='col-10 mx-auto z-0 text-center'>
@@ -69,6 +70,7 @@ export const Playlists = ({ listOfSongs, isLogged, userLikedSongs, volumen, list
               songs={randomizedSongs}
               volumen={volumen}
               useEff={useEff}
+              analytics={analytics}
             />
           </div>
         )}

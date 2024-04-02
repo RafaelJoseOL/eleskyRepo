@@ -5,11 +5,12 @@ import { Home } from "./pages/frontPage/home";
 import { NewSong } from "./pages/newSong/newSong";
 import { Playlists } from "./pages/playlist/playlists";
 import { MyPlaylists } from "./pages/playlist/myPlaylists";
+import { Login } from "./pages/login/login";
 import { Videos } from "./pages/videos/videos";
 import { Album } from "./pages/album/album";
 import { Error404 } from "./pages/error/error404";
 import { useAddUser } from "./hooks/useAddUser";
-import { BrowserRouter as Router, Route, Routes, Link, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import { SocialIcon } from 'react-social-icons'
 import React, { useState, useEffect } from 'react';
 import { collection, getDocs, query, where, doc, getDoc } from 'firebase/firestore';
@@ -21,7 +22,7 @@ import googleIcon from "./images/google.png";
 
 function App() {
   const [listOfSongs, setListOfSongs] = useState([]);
-  const defaultTags = ["Piano", "Guitarra", "Ukelele", "Voz", "Oído", "Concierto", "Mashups", "Medleys", "Memes"];
+  const defaultTags = ["Piano", "Flauta", "Guitarra", "Ukelele", "Voz", "Oído", "Concierto", "Mashups", "Medleys", "Memes"];
   const listOfTags = ["Animación", "Cantantes", "Clásica", "Películas", "Series", "Videojuegos"];
   const [isLogged, setIsLogged] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
@@ -32,6 +33,7 @@ function App() {
   const [volumen, setVolumen] = useState(50);
   const [loading, setLoading] = useState(true);
   const [refresh, setRefresh] = useState(false);
+  const [redirect, setRedirect] = useState(false);
   const provider = new GoogleAuthProvider();
   const { addUser } = useAddUser();
 
@@ -181,8 +183,7 @@ function App() {
           console.error('Error al añadir usuario:', error);
         }
       }
-
-      console.log("Inicio de sesión exitoso:", user);
+      setRedirect(true);
     } catch (error) {
       console.error("Error durante el inicio de sesión:", error);
     }
@@ -241,6 +242,9 @@ function App() {
                       <span>Login</span>
                       <img src={googleIcon} className='log-img ms-3' />
                     </button>
+                    // <div className='col-12 col-lg-2 ms-3'>
+                    //   <Link to="/Login" className="navbar-brand">Login</Link>
+                    // </div>
                   ) : (
                     <button className="navbar-brand log-btn" onClick={handleGoogleLogout}>
                       <span>Logout</span>
@@ -260,10 +264,12 @@ function App() {
               isAdmin={isAdmin} defaultTags={defaultTags} />} />
             <Route path="/Playlists" exact element={<Playlists listOfSongs={listOfSongs} isLogged={isLogged}
               userLikedSongs={userLikedSongs} setUserLikedSongs={setUserLikedSongs} volumen={volumen}
-              listOfTags={listOfTags} defaultTags={defaultTags} userPlaylists={userPlaylists} />} />
+              listOfTags={listOfTags} defaultTags={defaultTags} userPlaylists={userPlaylists} analytics={analytics} />} />
             <Route path="/MyPlaylists" exact element={<MyPlaylists listOfSongs={listOfSongs} isLogged={isLogged}
               db={db} userID={userID} userPlaylists={userPlaylists} userPlaylistsCount={userPlaylistsCount}
               refreshPlaylists={refreshPlaylists} />} />
+            <Route path="/Login" exact element={<Login handleGoogleLogin={handleGoogleLogin} redirect={redirect} 
+            isLogged={isLogged} />} />
             {/* <Route path="/Album" exact element={<Album isAdmin={isAdmin} />} />
             <Route path="/Videos" exact element={<Videos isAdmin={isAdmin} />} /> */}
             <Route path="/*" exact element={<Error404 />} />
