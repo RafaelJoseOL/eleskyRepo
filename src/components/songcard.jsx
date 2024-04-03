@@ -55,7 +55,7 @@ export const SongCard = ({ song, currSong, setCurrSong, isLogged, liked, handleL
             setCurrSong({ ...song, audioRef });
             setIsPlaying(true);
             audioRef.current.play();
-            logEvent(analytics, 'playSong', { name: song.song_name});
+            logEvent(analytics, 'playSong', { name: song.song_name, value: song.song_name});
         } else {
             setIsPlaying(false);
             audioRef.current.pause();
