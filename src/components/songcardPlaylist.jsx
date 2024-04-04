@@ -13,7 +13,8 @@ export const SongCardPlaylist = ({ songs, volumen, useEff, analytics, currSong, 
     const [duration, setDuration] = useState('00:00');
 
     useEffect(() => {
-        logEvent(analytics, 'playSong', { name: songs[0].song_name, value: songs[0].song_id });
+        // logEvent(analytics, 'playSong', { name: songs[0].song_name, value: songs[0].song_id });
+        logEvent(analytics, `playSong${songs[0].song_name}`);
     }, []);
 
     useEffect(() => {
@@ -29,17 +30,21 @@ export const SongCardPlaylist = ({ songs, volumen, useEff, analytics, currSong, 
 
     const changeSong = (next, skip) => {
         if (skip) {
-            logEvent(analytics, 'skipSong', { name: songs[currSong].song_name, value: songs[currSong].song_id });
+            // logEvent(analytics, 'skipSong', { name: songs[currSong].song_name, value: songs[currSong].song_id });
+            logEvent(analytics, `skipSong${songs[currSong].song_name}`);
         }
         if (next >= songs.length) {
             setCurrSong(0);
-            logEvent(analytics, 'playSong', { name: songs[0].song_name, value: songs[0].song_id });
+            // logEvent(analytics, 'playSong', { name: songs[0].song_name, value: songs[0].song_id });
+            logEvent(analytics, `playSong${songs[0].song_name}`);
         } else if (next < 0) {
             setCurrSong(songs.length - 1);
-            logEvent(analytics, 'playSong', { name: songs[songs.length - 1].song_name, value: songs[songs.length - 1].song_id });
+            // logEvent(analytics, 'playSong', { name: songs[songs.length - 1].song_name, value: songs[songs.length - 1].song_id });
+            logEvent(analytics, `playSong${songs[songs.length - 1].song_name}`);
         } else {
             setCurrSong(next);
-            logEvent(analytics, 'playSong', { name: songs[next].song_name, value: songs[next].song_id });
+            // logEvent(analytics, 'playSong', { name: songs[next].song_name, value: songs[next].song_id });
+            logEvent(analytics, `playSong${songs[next].song_name}`);
         }
     }
 
