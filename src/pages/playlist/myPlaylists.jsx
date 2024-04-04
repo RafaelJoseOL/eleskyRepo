@@ -22,7 +22,6 @@ export const MyPlaylists = ({ listOfSongs, isLogged, db, userID, userPlaylists, 
 
         setPlaylistSongs(updatedPlaylist);
         setPlaylistSongsNames(updatedPlaylistNames);
-        console.log(updatedPlaylistNames)
     }
 
     const handleAddPlaylist = async () => {
