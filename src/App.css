@@ -51,6 +51,10 @@
   height: 40px !important;
 }
 
+.collapse {
+  overflow: hidden;
+}
+
 .navbar-custom {
   background-color: #124D64;
 }
