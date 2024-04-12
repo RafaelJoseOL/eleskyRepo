@@ -104,7 +104,7 @@ export const NewSong = ({ listOfTags, isAdmin, defaultTags }) => {
                             </div>
                         </div>
                         <div className='row justify-content-center'>
-                            <button type='submit' className='btn btn-primary col-6 z-0'>
+                            <button type='submit' className='btn btn-primary col-6 z-0 mb-3'>
                                 Añadir canción
                             </button>
                         </div>

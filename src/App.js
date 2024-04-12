@@ -23,7 +23,7 @@ import googleIcon from "./images/google.png";
 function App() {
   const [listOfSongs, setListOfSongs] = useState([]);
   const defaultTags = ["Piano", "Flauta", "Guitarra", "Ukelele", "Voz", "Oído", "Concierto", "Mashups", "Medleys", "Memes"];
-  const listOfTags = ["Animación", "Cantantes", "Clásica", "Películas", "Series", "Videojuegos"];
+  const listOfTags = ["Animación", "Cantantes", "Clásica", "Otros", "Películas", "Series", "Videojuegos"];
   const [isLogged, setIsLogged] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [userLikedSongs, setUserLikedSongs] = useState([]);
