@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { SongCard } from '../../components/songcard';
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { collection, where, query, doc, getDoc, getDocs, updateDoc, setDoc } from 'firebase/firestore';
 import { db } from '../../config/firebase-config';
 
 export const Home = ({
@@ -78,6 +78,30 @@ export const Home = ({
         }
     };
 
+    // const handleChangeLink = async () => {
+    //     for (let index = 0; index < listOfSongs.length; index++) {
+    //         try {
+    //             const q = query(
+    //                 collection(db, "songsDocs"),
+    //                 where("song_id", "==", index)
+    //             );
+    //             const querySnapshot = await getDocs(q);
+
+    //             if (!querySnapshot.empty) {
+    //                 const docSnapshot = querySnapshot.docs[0];
+    //                 const songData = docSnapshot.data();
+    //                 const modifiedLink = songData.song_file.replace("www.dropbox.com", "dl.dropboxusercontent.com");        
+    //                 const songDocRef = doc(db, "songsDocs", docSnapshot.id);
+    //                 setDoc(songDocRef, { song_link_new: modifiedLink}, { merge: true });
+    //             } else {
+    //                 console.log("No se encontró ningún documento con el songID:", 0);
+    //             }
+    //         } catch (error) {
+    //             console.error('Error al actualizar la base de datos:', error);
+    //         }
+    //     }
+    // };
+
     return (
         <div className='container-fluid mainHome'>
             <div className='row'>
@@ -95,6 +119,7 @@ export const Home = ({
                             <option value="fechaInv">Antiguas</option>
                         </select>
                     </div>
+                    {/* <button onClick={() => handleChangeLink()}></button> */}
                     <div className='searchBar mt-3'>
                         <input
                             className='col-12 col-xl-6'

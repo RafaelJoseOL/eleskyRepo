@@ -8,6 +8,7 @@ import { MyPlaylists } from "./pages/playlist/myPlaylists";
 import { Login } from "./pages/login/login";
 import { Videos } from "./pages/videos/videos";
 import { Album } from "./pages/album/album";
+import { Test } from "./pages/test/test";
 import { Error404 } from "./pages/error/error404";
 import { useAddUser } from "./hooks/useAddUser";
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
@@ -57,6 +58,7 @@ function App() {
               song_origin: doc.data().song_origin,
               song_tags: doc.data().song_tags,
               song_file: doc.data().song_file,
+              song_link_new: doc.data().song_link_new,
               song_lore: doc.data().song_lore,
               song_date: doc.data().createdAt
             }));
@@ -270,6 +272,7 @@ function App() {
               refreshPlaylists={refreshPlaylists} />} />
             <Route path="/Login" exact element={<Login handleGoogleLogin={handleGoogleLogin} redirect={redirect} 
             isLogged={isLogged} />} />
+            {/* <Route path="/Test" exact element={<Test />} /> */}
             {/* <Route path="/Album" exact element={<Album isAdmin={isAdmin} />} />
             <Route path="/Videos" exact element={<Videos isAdmin={isAdmin} />} /> */}
             <Route path="/*" exact element={<Error404 />} />

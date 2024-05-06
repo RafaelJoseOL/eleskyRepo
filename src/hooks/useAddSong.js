@@ -1,15 +1,13 @@
-import { addDoc, collection, serverTimestamp, doc, getDoc, setDoc } from "firebase/firestore"
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { db, storage } from "../config/firebase-config"
+import { serverTimestamp, doc, getDoc, setDoc } from "firebase/firestore"
+import { db } from "../config/firebase-config"
 
 export const useAddSong = () => {
-    const songsCollection = collection(db, "songsDocs");
-
     const addSong = async ({ song_name, song_origin, song_link, song_tags, song_lore }) => {
         try {
             var oldLink = song_link;
             var newLink = oldLink.slice(0, -4);
             newLink += "raw=1";
+            const modifiedLink = newLink.replace("www.dropbox.com", "dl.dropboxusercontent.com"); 
 
             const lastSongDoc = await getDoc(doc(db, "metadata", "songs"));
             const lastSongID = lastSongDoc.exists() ? lastSongDoc.data().lastSongID : -1;
@@ -20,6 +18,7 @@ export const useAddSong = () => {
                 song_name: song_name,
                 song_origin: song_origin,
                 song_file: newLink,
+                song_link_new: modifiedLink,
                 song_tags: song_tags,
                 song_lore: song_lore,
                 createdAt: serverTimestamp()

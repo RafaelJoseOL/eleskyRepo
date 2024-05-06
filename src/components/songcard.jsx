@@ -3,10 +3,9 @@ import { useRef, useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlay, faPause, faHeart, faPlus, faDownload } from '@fortawesome/free-solid-svg-icons'
 import { faHeart as faHeartRegular } from '@fortawesome/free-regular-svg-icons';
-import ReactGA from 'react-ga';
 import { logEvent } from "firebase/analytics";
 
-export const SongCard = ({ song, currSong, setCurrSong, isLogged, liked, handleLikedSong, 
+export const SongCard = ({ song, currSong, setCurrSong, isLogged, liked, handleLikedSong,
     search, selectedTags, volumen, currentPage, analytics }) => {
     const audioRef = useRef();
     const [isPlaying, setIsPlaying] = useState(false);
@@ -41,6 +40,7 @@ export const SongCard = ({ song, currSong, setCurrSong, isLogged, liked, handleL
 
     const handleLoadedMetadata = () => {
         const totalDuration = audioRef.current.duration;
+        console.log(totalDuration)
         const minutes = Math.floor(totalDuration / 60);
         const seconds = Math.floor(totalDuration % 60);
         const formattedDuration = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
@@ -55,7 +55,6 @@ export const SongCard = ({ song, currSong, setCurrSong, isLogged, liked, handleL
             setCurrSong({ ...song, audioRef });
             setIsPlaying(true);
             audioRef.current.play();
-            // logEvent(analytics, 'playSong', { name: song.song_name, value: song.song_name});
             logEvent(analytics, `playSong - ${song.song_name}`);
         } else {
             setIsPlaying(false);
@@ -106,7 +105,7 @@ export const SongCard = ({ song, currSong, setCurrSong, isLogged, liked, handleL
                 {(song.song_lore !== undefined && song.song_lore !== '') && (
                     <button className='fw-bolder playlistButton rounded-circle loreButton'>
                         !
-                        <span class="loreText">{song.song_lore}</span>
+                        <span className="loreText">{song.song_lore}</span>
                     </button>
                 )}
                 {!isPlaying ? (
@@ -122,17 +121,17 @@ export const SongCard = ({ song, currSong, setCurrSong, isLogged, liked, handleL
                 <button
                     className='playlistButton rounded-circle'
                     id="download-song"
-                    onClick={() => { window.open(song.song_file, "_blank") }}>
+                    onClick={() => { window.open(song.song_link_new, "_blank") }}>
                     <FontAwesomeIcon icon={faDownload} />
                 </button>
                 <audio
-                    ref={audioRef}
-                    src={song.song_file}
-                    type="audio/mpeg"
                     onLoadedMetadata={handleLoadedMetadata}
                     onTimeUpdate={() => setCurrentTimeFormat(audioRef.current.currentTime)}
                     onPause={() => handlePlayPause(false)}
                     onEnded={() => handlePlayPause(false)}
+                    ref={audioRef}
+                    src={song.song_link_new}
+                    type="audio/mpeg"
                 />
             </div>
         </div>

@@ -119,12 +119,12 @@ export const SongCardPlaylist = ({ songs, volumen, useEff, analytics, currSong, 
                     <button
                         className='playlistButton rounded-circle'
                         id="download-song"
-                        onClick={() => { window.open(songs[currSong].song_file, "_blank") }}>
+                        onClick={() => { window.open(songs[currSong].song_link_new, "_blank") }}>
                         <FontAwesomeIcon icon={faDownload} />
                     </button>
                     <audio
                         ref={audioRef}
-                        src={songs[currSong].song_file}
+                        src={songs[currSong].song_link_new}
                         onLoadedMetadata={handleLoadedMetadata}
                         onTimeUpdate={() => setCurrentTimeFormat(audioRef.current.currentTime)}
                         onPause={() => handlePlayPause(false)}
